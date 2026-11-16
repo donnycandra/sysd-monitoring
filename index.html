@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Monitoring SBS - Sistem Minimum</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen p-6 font-sans">
+
+  <div class="max-w-5xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Sistem Preventif Sick Building Syndrome (SBS)</h1>
+        <p class="text-sm text-slate-500">Integrasi Sistem Minimum 1, Sistem Minimum 2 & Kontrol AC Otomatis</p>
+      </div>
+      <span id="koneksi-badge" class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+        Menghubungkan ke Firebase...
+      </span>
+    </div>
+
+    <!-- Panel Indikator Utama (Real-Time) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <p class="text-sm text-slate-500">Suhu Ruangan</p>
+        <p class="text-4xl font-bold text-slate-800 mt-2"><span id="val-suhu">--</span> °C</p>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <p class="text-sm text-slate-500">Status Kelembapan</p>
+        <p class="text-4xl font-bold text-slate-800 mt-2"><span id="val-lembap">--</span> %</p>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <p class="text-sm text-slate-500">Status Kontrol AC (Sismin 2)</p>
+        <p id="val-ac" class="text-2xl font-bold text-blue-600 mt-3">Menunggu Data...</p>
+      </div>
+    </div>
+
+    <!-- Panel Kondisi & Saran Kesehatan (Plan B) -->
+    <div id="panel-saran" class="p-6 rounded-xl shadow-sm border transition-all bg-slate-200 border-slate-300">
+      <p class="text-xs uppercase tracking-wider font-bold text-slate-600">Indikator Sistem Minimum 1:</p>
+      <h2 id="teks-kondisi" class="text-2xl font-bold text-slate-800 mt-1">Menunggu pembacaan sensor...</h2>
+      <hr class="my-3 border-slate-300">
+      <p class="text-sm font-semibold text-slate-700">Rekomendasi / Saran Tindakan:</p>
+      <p id="teks-saran" class="text-lg font-medium text-slate-900 mt-1">-</p>
+    </div>
+
+    <!-- Tabel Laporan Analisis Kondisi Sangat Lembap (Plan A) -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-800 mb-4">Laporan Riwayat Kondisi Lembap & Sangat Lembap (Untuk Analisis)</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b bg-slate-50 text-slate-600 text-sm">
+              <th class="p-3">Waktu</th>
+              <th class="p-3">Suhu (°C)</th>
+              <th class="p-3">Kelembapan (%)</th>
+              <th class="p-3">Indikator Kondisi</th>
+              <th class="p-3">Tindakan Sismin 2</th>
+            </tr>
+          </thead>
+          <tbody id="tabel-riwayat" class="text-sm text-slate-700 divide-y">
+            <tr><td colspan="5" class="p-3 text-center text-slate-400">Belum ada data laporan.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Panel Simulator (Untuk Tes Tanpa Alat) -->
+    <div class="bg-slate-800 text-white p-5 rounded-xl shadow-sm">
+      <h4 class="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3">Simulator Pengiriman Data Sistem Minimum 2 (Uji Coba)</h4>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="simulasiKirimData(25, 50, 1)" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-xs font-semibold">1. Normal - Normal</button>
+        <button onclick="simulasiKirimData(28, 70, 2)" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 rounded text-xs font-semibold">2. Hangat - Lembap</button>
+        <button onclick="simulasiKirimData(32, 85, 3)" class="px-3 py-2 bg-rose-600 hover:bg-rose-500 rounded text-xs font-semibold">3. Panas - Sangat Lembap</button>
+        <button onclick="simulasiKirimData(25, 72, 4)" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 rounded text-xs font-semibold">4. Normal - Lembap</button>
+        <button onclick="simulasiKirimData(20, 74, 5)" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 rounded text-xs font-semibold">5. Dingin - Lembap</button>
+        <button onclick="simulasiKirimData(19, 88, 6)" class="px-3 py-2 bg-rose-600 hover:bg-rose-500 rounded text-xs font-semibold">6. Dingin - Sangat Lembap</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Firebase & Logika Aplikasi -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, onValue, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Konfigurasi Firebase SBS-Monitoring milik Anda
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNlq-ZUAttr9u8O1XPxHUwKEgOOewTCVg",
+      authDomain: "sbs-monitoring-4df09.firebaseapp.com",
+      databaseURL: "https://sbs-monitoring-4df09-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "sbs-monitoring-4df09",
+      storageBucket: "sbs-monitoring-4df09.firebasestorage.app",
+      messagingSenderId: "736423984508",
+      appId: "1:736423984508:web:f4c6b6787d13ad1223b8f9",
+      measurementId: "G-RDVXV643BE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Daftar 6 Indikator dan Saran sesuai rancangan Plan A & Plan B
+    const daftarKondisi = {
+      1: {
+        indikator: "Suhu normal - ruangan normal",
+        saran: "Jaga kondisi ruangan agar tetap sehat",
+        tema: "bg-emerald-100 border-emerald-400"
+      },
+      2: {
+        indikator: "Suhu hangat - ruangan lembap",
+        saran: "Waspada ruanganmu lembap, pastikan tetap ada sirkulasi Udara di ruanganmu ya",
+        tema: "bg-amber-100 border-amber-400"
+      },
+      3: {
+        indikator: "Suhu panas - ruangan sangat lembap",
+        saran: "Segera ubah AC ke mode dry dan pastikan kebersihan ruanganmu tetap terjaga ya.. Salam sehat",
+        tema: "bg-rose-100 border-rose-400"
+      },
+      4: {
+        indikator: "Suhu normal - ruangan lembap",
+        saran: "Waspada ruanganmu lembap",
+        tema: "bg-amber-100 border-amber-400"
+      },
+      5: {
+        indikator: "Suhu dingin - ruangan lembap",
+        saran: "Waspada ruanganmu lembap",
+        tema: "bg-amber-100 border-amber-400"
+      },
+      6: {
+        indikator: "Suhu dingin - ruangan sangat lembap",
+        saran: "Segera ubah AC ke mode dry dan pastikan kebersihan ruanganmu tetap terjaga ya.. Salam sehat",
+        tema: "bg-rose-100 border-rose-400"
+      }
+    };
+
+    // 1. Membaca Data Real-Time dari Node 'sensor_terkini'
+    const sensorRef = ref(db, 'sensor_terkini');
+    onValue(sensorRef, (snapshot) => {
+      document.getElementById('koneksi-badge').innerText = "Terhubung (Real-Time)";
+      document.getElementById('koneksi-badge').className = "px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800";
+
+      const data = snapshot.val();
+      if (!data) return;
+
+      document.getElementById('val-suhu').innerText = data.suhu;
+      document.getElementById('val-lembap').innerText = data.kelembapan;
+      document.getElementById('val-ac').innerText = data.status_ac;
+
+      const info = daftarKondisi[data.kode_kondisi];
+      if (info) {
+        document.getElementById('teks-kondisi').innerText = info.indikator;
+        document.getElementById('teks-saran').innerText = info.saran;
+        document.getElementById('panel-saran').className = `p-6 rounded-xl shadow-sm border transition-all ${info.tema}`;
+      }
+    });
+
+    // 2. Membaca Tabel Laporan Analisis dari Node 'riwayat_lembap'
+    const riwayatRef = ref(db, 'riwayat_lembap');
+    onValue(riwayatRef, (snapshot) => {
+      const tbody = document.getElementById('tabel-riwayat');
+      tbody.innerHTML = "";
+      const logs = snapshot.val();
+      if (!logs) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-400">Belum ada data laporan.</td></tr>`;
+        return;
+      }
+
+      // Menampilkan 10 data terbaru di urutan paling atas
+      Object.values(logs).reverse().slice(0, 10).forEach(item => {
+        const row = `<tr class="hover:bg-slate-50">
+          <td class="p-3">${item.waktu}</td>
+          <td class="p-3 font-semibold">${item.suhu} °C</td>
+          <td class="p-3 font-semibold">${item.kelembapan} %</td>
+          <td class="p-3">${item.indikator}</td>
+          <td class="p-3 text-blue-600 font-medium">${item.status_ac}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    });
+
+    // 3. Fungsi Simulator untuk Mengetes Web Tanpa Rangkaian Hardware
+    window.simulasiKirimData = function(suhu, kelembapan, kode) {
+      const info = daftarKondisi[kode];
+      const acMode = (kode === 1) ? "AC Mode Normal" : "AC Mode Dry (Aktif Otomatis)";
+      const waktuSekarang = new Date().toLocaleString('id-ID');
+
+      // Update status terkini
+      set(ref(db, 'sensor_terkini'), {
+        suhu: suhu,
+        kelembapan: kelembapan,
+        kode_kondisi: kode,
+        status_ac: acMode,
+        waktu: waktuSekarang
+      });
+
+      // Jika ruangan lembap / sangat lembap (kode 2 sampai 6), simpan ke laporan riwayat analisis
+      if (kode !== 1) {
+        push(ref(db, 'riwayat_lembap'), {
+          waktu: waktuSekarang,
+          suhu: suhu,
+          kelembapan: kelembapan,
+          indikator: info.indikator,
+          status_ac: acMode
+        });
+      }
+    };
+  </script>
+</body>
+</html>
