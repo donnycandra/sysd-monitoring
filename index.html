@@ -12,7 +12,7 @@
     .nav-btn{display:flex;align-items:center;gap:.65rem;padding:.7rem .9rem;border-radius:.5rem;color:#a9cbc6;font-size:.875rem;font-weight:600;border-left:3px solid transparent;transition:background .15s}
     .nav-btn:hover{background:#17504e;color:#fff}
     .nav-btn.aktif{background:#17504e;color:#fff;border-left-color:#7fd1b9}
-    .nav-btn:focus-visible,#splash:focus-visible{outline:2px solid #7fd1b9;outline-offset:2px}
+    .nav-btn:focus-visible,#btn-masuk:focus-visible{outline:2px solid #7fd1b9;outline-offset:2px}
     #splash{background:radial-gradient(circle at 25% 15%,#1c5d5a,#0f3d3e 65%);transition:opacity .6s,visibility .6s}
     #splash.keluar{opacity:0;visibility:hidden;pointer-events:none}
     @keyframes denyut{50%{opacity:.35}}
@@ -23,10 +23,12 @@
 <body>
 
   <!-- Layar sapaan awal -->
-  <div id="splash" onclick="masuk()" tabindex="0" role="button" class="fixed inset-0 z-50 flex flex-col items-center justify-center text-center text-white cursor-pointer p-6">
+  <div id="splash" class="fixed inset-0 z-50 flex flex-col items-center justify-center text-center text-white p-6">
     <h1 id="sapaan" class="text-5xl md:text-7xl font-extrabold tracking-tight">Selamat datang</h1>
     <p class="mt-4 text-lg max-w-md text-teal-100/80">Pantau suhu dan kelembapan ruangan Anda secara langsung.</p>
-    <p class="denyut mt-14 text-sm font-semibold text-emerald-200 border border-emerald-200/40 rounded-full px-5 py-2">Klik untuk lanjut</p>
+    <button type="button" id="btn-masuk" onclick="masuk()" class="denyut mt-14 text-sm font-semibold text-emerald-200 border border-emerald-200/40 hover:bg-emerald-200/15 hover:border-emerald-200 transition rounded-full px-5 py-2 cursor-pointer">
+      Klik untuk lanjut
+    </button>
   </div>
 
   <div class="flex flex-col md:flex-row min-h-screen">
@@ -162,7 +164,6 @@
     document.getElementById('sapaan').innerText = sapa;
 
     function masuk() { document.getElementById('splash').classList.add('keluar'); }
-    document.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') masuk(); });
 
     function tampilTab(nama) {
       ['dashboard', 'statistik'].forEach(t => {
