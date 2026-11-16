@@ -46,9 +46,23 @@
       <p id="teks-saran" class="text-lg font-medium text-slate-900 mt-1">-</p>
     </div>
 
-    <!-- Tabel Laporan Analisis Kondisi Sangat Lembap (Plan A) -->
+    <!-- Tabel Laporan Analisis Kondisi Sangat Lembap (Plan A) + Tombol Export CSV -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-      <h3 class="text-lg font-bold text-slate-800 mb-4">Laporan Riwayat Kondisi Lembap & Sangat Lembap (Untuk Analisis)</h3>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-800">Laporan Riwayat Kondisi Lembap & Sangat Lembap (Untuk Analisis)</h3>
+          <p class="text-xs text-slate-500">Total data tersimpan: <span id="total-data" class="font-bold text-slate-700">0</span> baris</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="downloadCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm transition flex items-center gap-2">
+            📥 Download Laporan (.CSV)
+          </button>
+          <button onclick="hapusRiwayat()" class="px-3 py-2 bg-slate-200 hover:bg-rose-100 hover:text-rose-700 text-slate-700 rounded-lg text-xs font-semibold transition">
+            🗑️ Reset
+          </button>
+        </div>
+      </div>
+
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
@@ -84,7 +98,7 @@
   <!-- Script Firebase & Logika Aplikasi -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, onValue, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, onValue, set, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     // Konfigurasi Firebase SBS-Monitoring milik Anda
     const firebaseConfig = {
@@ -100,6 +114,9 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+
+    // Menyimpan seluruh riwayat di memori untuk keperluan Export CSV
+    let semuaDataRiwayat = [];
 
     // Daftar 6 Indikator dan Saran sesuai rancangan Plan A & Plan B
     const daftarKondisi = {
@@ -162,13 +179,20 @@
       const tbody = document.getElementById('tabel-riwayat');
       tbody.innerHTML = "";
       const logs = snapshot.val();
+
       if (!logs) {
+        semuaDataRiwayat = [];
+        document.getElementById('total-data').innerText = "0";
         tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-400">Belum ada data laporan.</td></tr>`;
         return;
       }
 
-      // Menampilkan 10 data terbaru di urutan paling atas
-      Object.values(logs).reverse().slice(0, 10).forEach(item => {
+      // Simpan semua data (urutan terbaru di atas)
+      semuaDataRiwayat = Object.values(logs).reverse();
+      document.getElementById('total-data').innerText = semuaDataRiwayat.length;
+
+      // Menampilkan 10 data terbaru di tabel web
+      semuaDataRiwayat.slice(0, 10).forEach(item => {
         const row = `<tr class="hover:bg-slate-50">
           <td class="p-3">${item.waktu}</td>
           <td class="p-3 font-semibold">${item.suhu} °C</td>
@@ -180,13 +204,47 @@
       });
     });
 
-    // 3. Fungsi Simulator untuk Mengetes Web Tanpa Rangkaian Hardware
+    // 3. Fungsi Download Laporan ke CSV / Excel
+    window.downloadCSV = function() {
+      if (semuaDataRiwayat.length === 0) {
+        alert("Belum ada data laporan untuk diunduh.");
+        return;
+      }
+
+      // Header kolom CSV (menggunakan titik koma ';' agar langsung rapi saat dibuka di Excel Indonesia)
+      let csvContent = "\uFEFFNo;Waktu;Suhu (C);Kelembapan (%);Indikator Kondisi;Tindakan Sismin 2\n";
+
+      semuaDataRiwayat.forEach((item, index) => {
+        const waktuBersih = String(item.waktu).replace(/;/g, ",");
+        const baris = `${index + 1};"${waktuBersih}";${item.suhu};${item.kelembapan};"${item.indikator}";"${item.status_ac}"`;
+        csvContent += baris + "\n";
+      });
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const tanggalFile = new Date().toISOString().slice(0, 10);
+
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Laporan_Analisis_SBS_${tanggalFile}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    // 4. Fungsi Reset Riwayat (Opsional untuk membersihkan data simulasi)
+    window.hapusRiwayat = function() {
+      if (confirm("Apakah Anda yakin ingin menghapus seluruh riwayat laporan di database?")) {
+        remove(ref(db, 'riwayat_lembap'));
+      }
+    };
+
+    // 5. Fungsi Simulator untuk Mengetes Web Tanpa Rangkaian Hardware
     window.simulasiKirimData = function(suhu, kelembapan, kode) {
       const info = daftarKondisi[kode];
       const acMode = (kode === 1) ? "AC Mode Normal" : "AC Mode Dry (Aktif Otomatis)";
       const waktuSekarang = new Date().toLocaleString('id-ID');
 
-      // Update status terkini
       set(ref(db, 'sensor_terkini'), {
         suhu: suhu,
         kelembapan: kelembapan,
@@ -195,7 +253,6 @@
         waktu: waktuSekarang
       });
 
-      // Jika ruangan lembap / sangat lembap (kode 2 sampai 6), simpan ke laporan riwayat analisis
       if (kode !== 1) {
         push(ref(db, 'riwayat_lembap'), {
           waktu: waktuSekarang,
