@@ -7,27 +7,29 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Link CSS hasil ekspor Figma untuk 4 waktu -->
+  <!-- Link CSS hasil ekspor Figma -->
   <link href="./tampilan-awal-malam-6s.css" rel="stylesheet" />
   <link href="./app-1e.css" rel="stylesheet" />
   <link href="./app-pm.css" rel="stylesheet" />
   <link href="./app-wp.css" rel="stylesheet" />
+  <link href="./tampilan-dashboard-pw.css" rel="stylesheet" />
 
   <style>
-    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: #eef3f2; color: #12302f; margin: 0; }
-    .card { background: #fff; padding: 1.25rem; border-radius: .75rem; border: 1px solid #d5e2df; }
-    .nav-btn { display: flex; align-items: center; gap: .65rem; padding: .7rem .9rem; border-radius: .5rem; color: #a9cbc6; font-size: .875rem; font-weight: 600; border-left: 3px solid transparent; transition: background .15s; }
-    .nav-btn:hover { background: #17504e; color: #fff; }
-    .nav-btn.aktif { background: #17504e; color: #fff; border-left-color: #7fd1b9; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: #f4f7f6;
+      color: #0f2926;
+      margin: 0;
+    }
 
-    /* Kontainer Utama Splash Screen */
+    /* =========================================================
+       1. STYLING LAYAR PEMBUKA (PAGI, SIANG, SORE, MALAM)
+       ========================================================= */
     #splash { position: fixed; inset: 0; z-index: 50; transition: opacity .6s ease, visibility .6s ease; }
     #splash.keluar { opacity: 0; visibility: hidden; pointer-events: none; }
     .layar-waktu.hidden { display: none !important; }
 
-    /* =========================================================
-       STYLING CADANGAN UNTUK 4 KODE EKSPOR FIGMA (PAGI, SIANG, SORE, MALAM)
-       ========================================================= */
     .app-wp-frame-app-wp,
     .app-1e-frame-app1e,
     .app-pm-frame-app-pm,
@@ -45,304 +47,543 @@
       user-select: none;
     }
 
-    /* 1. TEMA PAGI (app-wp) */
-    .app-wp-frame-app-wp {
-      background: linear-gradient(180deg, #fdf6e2 0%, #d4ebfc 48%, #6bb5f9 100%);
-      color: #0d2a4a;
-    }
+    .app-wp-frame-app-wp { background: linear-gradient(180deg, #fdf6e2 0%, #d4ebfc 48%, #6bb5f9 100%); color: #0d2a4a; }
+    .app-1e-frame-app1e { background: linear-gradient(180deg, #dff1ff 0%, #99d1ff 50%, #3f93e8 100%); color: #0d2b4d; }
+    .app-pm-frame-app-pm { background: linear-gradient(180deg, #fce3c6 0%, #d2c1e3 50%, #6d83c7 100%); color: #1e2246; }
+    .tampilan-awal-malam-6s-frame-tampilan-awal6s { background: linear-gradient(180deg, #0b1f40 0%, #153564 55%, #204982 100%); color: #ffffff; }
+    .tampilan-awal-malam-6s-frame-app-eh { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
 
-    /* 2. TEMA SIANG (app-1e) */
-    .app-1e-frame-app1e {
-      background: linear-gradient(180deg, #dff1ff 0%, #99d1ff 50%, #3f93e8 100%);
-      color: #0d2b4d;
-    }
-
-    /* 3. TEMA SORE (app-pm) */
-    .app-pm-frame-app-pm {
-      background: linear-gradient(180deg, #fce3c6 0%, #d2c1e3 50%, #6d83c7 100%);
-      color: #1e2246;
-    }
-
-    /* 4. TEMA MALAM (tampilan-awal-malam-6s) */
-    .tampilan-awal-malam-6s-frame-tampilan-awal6s {
-      background: linear-gradient(180deg, #0b1f40 0%, #153564 55%, #204982 100%);
-      color: #ffffff;
-    }
-    .tampilan-awal-malam-6s-frame-app-eh {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    /* Sembunyikan elemen dekoratif kosong dari ekspor Figma */
     .app-wp-frame-text-lo, .app-wp-frame-container-an, .app-wp-frame-container-zm,
     .app-1e-frame-text4b, .app-1e-frame-container-fc, .app-1e-frame-container-be,
     .app-pm-frame-text-el, .app-pm-frame-container-js, .app-pm-frame-container8r,
-    .tampilan-awal-malam-6s-frame-text-n8, .tampilan-awal-malam-6s-frame-container-c7, .tampilan-awal-malam-6s-frame-container-aa {
-      display: none;
-    }
+    .tampilan-awal-malam-6s-frame-text-n8, .tampilan-awal-malam-6s-frame-container-c7, .tampilan-awal-malam-6s-frame-container-aa { display: none; }
 
-    /* Kotak Ikon Atas (Siang & Sore) */
-    .app-1e-frame-container0d,
-    .app-pm-frame-container-xq {
-      width: 3.5rem;
-      height: 3.5rem;
-      border-radius: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      order: 1;
+    .app-1e-frame-container0d, .app-pm-frame-container-xq {
+      width: 3.5rem; height: 3.5rem; border-radius: 1rem; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.5rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); order: 1;
     }
     .app-1e-frame-container0d { background: rgba(255, 255, 255, 0.85); color: #163d6b; }
     .app-pm-frame-container-xq { background: rgba(252, 240, 225, 0.9); color: #273866; }
 
-    /* Subjudul Kecil di Atas Sapaan */
-    .app-wp-text-si-segar-ol1,
-    .app-1e-text-sbs-environmen8h1,
-    .app-pm-text-sbs-environmen-xb1,
-    .tampilan-awal-malam-6s-text-si-segar7d1 {
-      margin-bottom: 0.75rem;
-      order: 2;
-    }
-    .app-wp-text-si-segar-ol2,
-    .app-1e-text-sbs-environmen8h2,
-    .app-pm-text-sbs-environmen-xb2,
-    .tampilan-awal-malam-6s-text-si-segar7d2 {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      opacity: 0.8;
-      margin: 0;
+    .app-wp-text-si-segar-ol1, .app-1e-text-sbs-environmen8h1, .app-pm-text-sbs-environmen-xb1, .tampilan-awal-malam-6s-text-si-segar7d1 { margin-bottom: 0.75rem; order: 2; }
+    .app-wp-text-si-segar-ol2, .app-1e-text-sbs-environmen8h2, .app-pm-text-sbs-environmen-xb2, .tampilan-awal-malam-6s-text-si-segar7d2 {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.8; margin: 0;
     }
 
-    /* Judul Sapaan Utama (Selamat pagi/siang/sore/malam) */
-    .app-wp-text-selamat-pagi-dk1,
-    .app-1e-text-selamat-siang-ts1,
-    .app-pm-text-selamat-sore-ma1,
-    .tampilan-awal-malam-6s-text-selamat-malam-u21 {
-      margin-bottom: 1.25rem;
-      order: 3;
-    }
-    .app-wp-text-selamat-pagi-dk2,
-    .app-1e-text-selamat-siang-ts2,
-    .app-pm-text-selamat-sore-ma2,
-    .tampilan-awal-malam-6s-text-selamat-malam-u22 {
-      font-size: clamp(2.75rem, 6vw, 4.5rem);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
-      margin: 0;
+    .app-wp-text-selamat-pagi-dk1, .app-1e-text-selamat-siang-ts1, .app-pm-text-selamat-sore-ma1, .tampilan-awal-malam-6s-text-selamat-malam-u21 { margin-bottom: 1.25rem; order: 3; }
+    .app-wp-text-selamat-pagi-dk2, .app-1e-text-selamat-siang-ts2, .app-pm-text-selamat-sore-ma2, .tampilan-awal-malam-6s-text-selamat-malam-u22 {
+      font-size: clamp(2.75rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; margin: 0;
     }
 
-    /* Teks Deskripsi */
-    .app-wp-text-pantau-kualitas2j1,
-    .app-1e-text-pantau-kualitas-sl1,
-    .app-pm-text-pantau-kualitas-jd1,
-    .tampilan-awal-malam-6s-text-pantau-kualitas1k1 {
-      max-width: 28rem;
-      margin-bottom: 2.5rem;
-      order: 4;
-    }
-    .app-wp-text-pantau-kualitas2j2,
-    .app-1e-text-pantau-kualitas-sl2,
-    .app-pm-text-pantau-kualitas-jd2,
-    .tampilan-awal-malam-6s-text-pantau-kualitas1k2 {
-      font-size: clamp(0.9rem, 2vw, 1.05rem);
-      line-height: 1.6;
-      opacity: 0.85;
-      margin: 0;
+    .app-wp-text-pantau-kualitas2j1, .app-1e-text-pantau-kualitas-sl1, .app-pm-text-pantau-kualitas-jd1, .tampilan-awal-malam-6s-text-pantau-kualitas1k1 { max-width: 28rem; margin-bottom: 2.5rem; order: 4; }
+    .app-wp-text-pantau-kualitas2j2, .app-1e-text-pantau-kualitas-sl2, .app-pm-text-pantau-kualitas-jd2, .tampilan-awal-malam-6s-text-pantau-kualitas1k2 {
+      font-size: clamp(0.9rem, 2vw, 1.05rem); line-height: 1.6; opacity: 0.85; margin: 0;
     }
 
-    /* Tombol "Buka dashboard" (Hanya tombol ini yang bisa diklik) */
-    .app-wp-frame-button-v3,
-    .app-1e-frame-button-en,
-    .app-pm-frame-button-h3,
-    .tampilan-awal-malam-6s-frame-button-fi {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.85rem;
-      padding: 0.6rem 0.65rem 0.6rem 1.5rem;
-      border-radius: 9999px;
-      text-decoration: none;
-      cursor: pointer;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease, filter 0.2s ease;
-      order: 5;
+    .app-wp-frame-button-v3, .app-1e-frame-button-en, .app-pm-frame-button-h3, .tampilan-awal-malam-6s-frame-button-fi {
+      display: inline-flex; align-items: center; gap: 0.85rem; padding: 0.6rem 0.65rem 0.6rem 1.5rem; border-radius: 9999px;
+      text-decoration: none; cursor: pointer; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2); transition: transform 0.2s ease, filter 0.2s ease; order: 5;
     }
-    .app-wp-frame-button-v3:hover,
-    .app-1e-frame-button-en:hover,
-    .app-pm-frame-button-h3:hover,
-    .tampilan-awal-malam-6s-frame-button-fi:hover {
-      transform: scale(1.05);
-      filter: brightness(1.08);
-    }
-    .app-wp-frame-button-v3:active,
-    .app-1e-frame-button-en:active,
-    .app-pm-frame-button-h3:active,
-    .tampilan-awal-malam-6s-frame-button-fi:active {
-      transform: scale(0.96);
-    }
-
-    /* Warna Spesifik Tombol per Waktu */
+    .app-wp-frame-button-v3:hover, .app-1e-frame-button-en:hover, .app-pm-frame-button-h3:hover, .tampilan-awal-malam-6s-frame-button-fi:hover { transform: scale(1.05); filter: brightness(1.08); }
     .app-wp-frame-button-v3 { background-color: #1b4571; color: #ffffff; }
     .app-1e-frame-button-en { background-color: #163d6b; color: #ffffff; }
     .app-pm-frame-button-h3 { background-color: #273866; color: #ffffff; }
     .tampilan-awal-malam-6s-frame-button-fi { background-color: #dbeafe; color: #0f294a; }
 
-    .app-wp-text-buka-dashboard642,
-    .app-1e-text-buka-dashboard-bq2,
-    .app-pm-text-buka-dashboard-s42,
-    .tampilan-awal-malam-6s-text-buka-dashboard-if2 {
-      font-size: 0.875rem;
-      font-weight: 700;
-      margin: 0;
-    }
-
-    /* Lingkaran Ikon Panah di Dalam Tombol */
-    .app-wp-frame-text91,
-    .app-1e-frame-text-xs,
-    .app-pm-frame-text-yh,
-    .tampilan-awal-malam-6s-frame-text-wd {
-      width: 1.75rem;
-      height: 1.75rem;
-      border-radius: 9999px;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .app-wp-text-buka-dashboard642, .app-1e-text-buka-dashboard-bq2, .app-pm-text-buka-dashboard-s42, .tampilan-awal-malam-6s-text-buka-dashboard-if2 { font-size: 0.875rem; font-weight: 700; margin: 0; }
+    .app-wp-frame-text91, .app-1e-frame-text-xs, .app-pm-frame-text-yh, .tampilan-awal-malam-6s-frame-text-wd {
+      width: 1.75rem; height: 1.75rem; border-radius: 9999px; color: #ffffff; display: flex; align-items: center; justify-content: center;
     }
     .app-wp-frame-text91 { background-color: #356699; }
     .app-1e-frame-text-xs { background-color: #316299; }
     .app-pm-frame-text-yh { background-color: #45588c; }
     .tampilan-awal-malam-6s-frame-text-wd { background-color: #255285; }
 
-    /* Teks Footer di Bagian Bawah */
-    .app-wp-text-e81,
-    .app-1e-text-sistem-minimum-kr1,
-    .app-pm-text-sistem-minimum-qd1,
-    .tampilan-awal-malam-6s-text-yo1 {
-      position: absolute;
-      bottom: 1.5rem;
-      left: 0;
-      right: 0;
-      text-align: center;
+    .app-wp-text-e81, .app-1e-text-sistem-minimum-kr1, .app-pm-text-sistem-minimum-qd1, .tampilan-awal-malam-6s-text-yo1 {
+      position: absolute; bottom: 1.5rem; left: 0; right: 0; text-align: center;
     }
-    .app-wp-text-e82,
-    .app-1e-text-sistem-minimum-kr2,
-    .app-pm-text-sistem-minimum-qd2,
-    .tampilan-awal-malam-6s-text-yo2 {
-      font-size: 0.75rem;
-      opacity: 0.65;
-      margin: 0;
+    .app-wp-text-e82, .app-1e-text-sistem-minimum-kr2, .app-pm-text-sistem-minimum-qd2, .tampilan-awal-malam-6s-text-yo2 { font-size: 0.75rem; opacity: 0.65; margin: 0; }
+
+    /* =========================================================
+       2. STYLING DASHBOARD & SIDEBAR DARI EKSPOR FIGMA (#n1310)
+       ========================================================= */
+    .tampilan-dashboard-pw-frame-tampilan-dashboard-pw {
+      display: flex;
+      flex-direction: row-reverse;
+      min-height: 100vh;
+      background: #f4f7f6;
+    }
+    @media (max-width: 900px) {
+      .tampilan-dashboard-pw-frame-tampilan-dashboard-pw { flex-direction: column-reverse; }
     }
 
-    @media (prefers-reduced-motion: reduce) { #splash { transition: none; } }
+    /* SIDEBAR KIRI (#n13248) */
+    .tampilan-dashboard-pw-frame-app-k1 {
+      width: 260px;
+      flex-shrink: 0;
+      background: #0d3836;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1.15rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    @media (max-width: 900px) {
+      .tampilan-dashboard-pw-frame-app-k1 { width: 100%; height: auto; position: relative; }
+    }
+
+    .tampilan-dashboard-pw-frame-container-v2 {
+      padding: 0 0.5rem 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .tampilan-dashboard-pw-text-monitor-sbs-tb2 { font-size: 1.2rem; font-weight: 800; margin: 0; letter-spacing: -0.01em; color: #fff; }
+    .tampilan-dashboard-pw-text-pantau-kondisi-w82 { font-size: 0.75rem; color: #9ec5c0; margin: 0.3rem 0 0; line-height: 1.4; }
+
+    .tampilan-dashboard-pw-frame-container-margin0j { padding: 1.25rem 0.5rem 0.5rem; }
+    .tampilan-dashboard-pw-text-workspace-i92 { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #7faea8; margin: 0; }
+
+    .tampilan-dashboard-pw-frame-navigation-navigasi-w7 { display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.25rem; }
+    .tampilan-dashboard-pw-frame-button78,
+    .tampilan-dashboard-pw-frame-button-om {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.65rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: #a9cbc6;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      border-left: 3px solid transparent;
+    }
+    .tampilan-dashboard-pw-frame-button78:hover,
+    .tampilan-dashboard-pw-frame-button-om:hover { background: rgba(255, 255, 255, 0.07); color: #ffffff; }
+    .tampilan-dashboard-pw-frame-button78.nav-aktif,
+    .tampilan-dashboard-pw-frame-button-om.nav-aktif {
+      background: #164f4c;
+      color: #ffffff;
+      border-left-color: #6ee7b7;
+    }
+    .tampilan-dashboard-pw-text-dashboard2k2,
+    .tampilan-dashboard-pw-text-statistik0a2 { margin: 0; }
+
+    /* Kartu Status Bawah di Sidebar (#n13296) */
+    .tampilan-dashboard-pw-frame-container-align-pi { margin-top: auto; padding-top: 1.5rem; }
+    .tampilan-dashboard-pw-frame-container-p9 {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .tampilan-dashboard-pw-frame-container-r9 {
+      width: 2.1rem; height: 2.1rem; border-radius: 0.5rem; background: rgba(110, 231, 183, 0.15);
+      color: #6ee7b7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .tampilan-dashboard-pw-frame-container-oc { flex: 1; min-width: 0; }
+    .tampilan-dashboard-pw-text-sistem-aktif-ae2 { font-size: 0.8rem; font-weight: 700; margin: 0; color: #fff; }
+    .tampilan-dashboard-pw-text-semua-sensor-wg2 { font-size: 0.7rem; color: #9ec5c0; margin: 0.1rem 0 0; }
+    .tampilan-dashboard-pw-frame-text3g { width: 8px; height: 8px; border-radius: 9999px; background: #34d399; box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2); }
+
+    .tampilan-dashboard-pw-frame-container-sf {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 0.35rem 0; font-size: 0.72rem; color: #7faea8;
+    }
+    .tampilan-dashboard-pw-text-sbs-monitor-he2, .tampilan-dashboard-pw-text0-bk2 { margin: 0; }
+
+    /* AREA KONTEN UTAMA (#n1311) */
+    .tampilan-dashboard-pw-frame-app-ev {
+      flex: 1;
+      min-width: 0;
+      padding: 1.75rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    @media (max-width: 640px) {
+      .tampilan-dashboard-pw-frame-app-ev { padding: 1.15rem; }
+    }
+
+    /* HEADER (#n1315) */
+    .tampilan-dashboard-pw-frame-header-mz {
+      background: #ffffff;
+      border: 1px solid #dce7e5;
+      border-radius: 1rem;
+      padding: 1.35rem 1.6rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 10px rgba(15, 41, 38, 0.03);
+    }
+    .tampilan-dashboard-pw-text-sistem-preventif642 {
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.14em; color: #0f766e; margin: 0; text-transform: uppercase;
+    }
+    .tampilan-dashboard-pw-text-sick-building-mk2 {
+      font-size: 1.55rem; font-weight: 800; color: #0f2926; margin: 0.2rem 0; letter-spacing: -0.02em;
+    }
+    .tampilan-dashboard-pw-text-integrasi-sensor-jn2 {
+      font-size: 0.85rem; color: #5b7571; margin: 0;
+    }
+
+    /* Badge Koneksi (#n1328) */
+    .tampilan-dashboard-pw-frame-container-vb {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.45rem 0.9rem; border-radius: 9999px;
+      background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46;
+      font-size: 0.78rem; font-weight: 700;
+    }
+    .tampilan-dashboard-pw-frame-text6c {
+      width: 8px; height: 8px; border-radius: 9999px; background: #10b981;
+    }
+    .tampilan-dashboard-pw-text-terhubung-real-nq2 { margin: 0; }
+
+    /* CONTAINER SECTIONS (#n13246 & #n1332) */
+    .tampilan-dashboard-pw-frame-container-margin-e7 { margin-top: 1.5rem; }
+    .tampilan-dashboard-pw-frame-container9s { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* 3 KARTU METRIK UTAMA (#n1333) */
+    .tampilan-dashboard-pw-frame-section-yr {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.15rem;
+    }
+    @media (max-width: 768px) {
+      .tampilan-dashboard-pw-frame-section-yr { grid-template-columns: 1fr; }
+    }
+
+    .tampilan-dashboard-pw-frame-article-fm,
+    .tampilan-dashboard-pw-frame-article-u0,
+    .tampilan-dashboard-pw-frame-article4z {
+      background: #ffffff;
+      border: 1px solid #dce7e5;
+      border-radius: 1rem;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 10px rgba(15, 41, 38, 0.03);
+    }
+
+    .tampilan-dashboard-pw-frame-container4l,
+    .tampilan-dashboard-pw-frame-container-iz,
+    .tampilan-dashboard-pw-frame-container5m {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;
+    }
+
+    .tampilan-dashboard-pw-frame-text1o,
+    .tampilan-dashboard-pw-frame-text23,
+    .tampilan-dashboard-pw-frame-text-ul {
+      width: 2.25rem; height: 2.25rem; border-radius: 0.65rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tampilan-dashboard-pw-frame-text1o { background: #eff6ff; color: #2563eb; }
+    .tampilan-dashboard-pw-frame-text23 { background: #ecfdf5; color: #059669; }
+    .tampilan-dashboard-pw-frame-text-ul { background: #f0fdfa; color: #0d9488; }
+
+    .tampilan-dashboard-pw-frame-text-y1,
+    .tampilan-dashboard-pw-frame-text-tz,
+    .tampilan-dashboard-pw-frame-text-b3 {
+      padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700;
+      background: #f1f5f9; color: #334155;
+    }
+    .tampilan-dashboard-pw-text-stabil922,
+    .tampilan-dashboard-pw-text-normal502,
+    .tampilan-dashboard-pw-text-otomatis-m42 { margin: 0; }
+
+    .tampilan-dashboard-pw-text-suhu-ruangan-px2,
+    .tampilan-dashboard-pw-text-kelembapan-iy2,
+    .tampilan-dashboard-pw-text-kontrol-ac862 {
+      font-size: 0.85rem; font-weight: 600; color: #5b7571; margin: 0;
+    }
+
+    .tampilan-dashboard-pw-frame-container-bz,
+    .tampilan-dashboard-pw-frame-container-ib {
+      display: flex; align-items: baseline; gap: 0.25rem; margin: 0.5rem 0 0.75rem;
+    }
+    .tampilan-dashboard-pw-text8n02,
+    .tampilan-dashboard-pw-text58-tc2 {
+      font-size: 2.35rem; font-weight: 800; color: #0f2926; margin: 0; line-height: 1.1;
+    }
+    .tampilan-dashboard-pw-text-ca82,
+    .tampilan-dashboard-pw-text-at2 {
+      font-size: 1.15rem; font-weight: 700; color: #64748b; margin: 0;
+    }
+
+    /* Status AC di Kartu 3 (#n1386) */
+    .tampilan-dashboard-pw-frame-container-j7 {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin: 0.65rem 0 0.85rem; padding: 0.5rem 0.85rem;
+      border-radius: 0.65rem; background: #eff6ff; color: #1d4ed8; width: fit-content;
+    }
+    .tampilan-dashboard-pw-text-mode-normal-wv2 {
+      font-size: 1.05rem; font-weight: 800; margin: 0;
+    }
+
+    .tampilan-dashboard-pw-text-rentang-nyaman-d52,
+    .tampilan-dashboard-pw-text-ideal-kelembapan-wv2,
+    .tampilan-dashboard-pw-text-kontrol-adaptif-g02 {
+      font-size: 0.76rem; color: #64748b; margin: 0; padding-top: 0.65rem; border-top: 1px solid #f1f5f9;
+    }
+
+    /* BANNER INDIKATOR SISTEM MINIMUM 1 (#n1397) */
+    .tampilan-dashboard-pw-frame-section-ix {
+      background: #ecfdf5;
+      border: 1px solid #6ee7b7;
+      border-radius: 1rem;
+      padding: 1.35rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.15rem;
+      transition: all 0.25s ease;
+    }
+    @media (max-width: 640px) {
+      .tampilan-dashboard-pw-frame-section-ix { flex-direction: column; align-items: flex-start; }
+    }
+    .tampilan-dashboard-pw-frame-container-ro {
+      width: 3rem; height: 3rem; border-radius: 0.85rem; background: #ffffff;
+      color: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .tampilan-dashboard-pw-frame-container4y { flex: 1; min-width: 0; }
+    .tampilan-dashboard-pw-text-indikator-sistem-z42 {
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #047857; margin: 0;
+    }
+    .tampilan-dashboard-pw-text-suhu-normal212 {
+      font-size: 1.3rem; font-weight: 800; color: #064e3b; margin: 0.2rem 0;
+    }
+    .tampilan-dashboard-pw-text-pertahanka-sirkulasi-et2 {
+      font-size: 0.875rem; color: #065f46; margin: 0;
+    }
+    .tampilan-dashboard-pw-frame-container-mx {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.4rem 0.85rem; border-radius: 9999px; background: #ffffff;
+      font-size: 0.78rem; font-weight: 700; color: #065f46; flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+    .tampilan-dashboard-pw-frame-text-xy { width: 8px; height: 8px; border-radius: 9999px; background: #10b981; }
+    .tampilan-dashboard-pw-text-kondisi-baik8z2 { margin: 0; }
+
+    /* SECTION RIWAYAT SENSOR & TABEL (#n13118) */
+    .tampilan-dashboard-pw-frame-section-yl {
+      background: #ffffff;
+      border: 1px solid #dce7e5;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(15, 41, 38, 0.03);
+    }
+    .tampilan-dashboard-pw-frame-container9m {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem;
+    }
+    .tampilan-dashboard-pw-text-riwayat-sensor-oo2 {
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; color: #0f766e; margin: 0; text-transform: uppercase;
+    }
+    .tampilan-dashboard-pw-text-laporan-kondisi-ui2 {
+      font-size: 1.25rem; font-weight: 800; color: #0f2926; margin: 0.2rem 0;
+    }
+    .tampilan-dashboard-pw-text4-data5j2 {
+      font-size: 0.8rem; color: #64748b; margin: 0;
+    }
+
+    /* Tombol Reset & Unduh CSV (#n13131) */
+    .tampilan-dashboard-pw-frame-container1g { display: flex; gap: 0.6rem; align-items: center; }
+    .tampilan-dashboard-pw-frame-button4d,
+    .tampilan-dashboard-pw-frame-button-ni {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.55rem 0.95rem; border-radius: 0.6rem; font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; text-decoration: none; transition: all 0.15s ease;
+    }
+    .tampilan-dashboard-pw-frame-button4d {
+      background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0;
+    }
+    .tampilan-dashboard-pw-frame-button4d:hover { background: #ffe4e6; color: #be123c; border-color: #fecdd3; }
+    .tampilan-dashboard-pw-frame-button-ni {
+      background: #0d9488; color: #ffffff;
+    }
+    .tampilan-dashboard-pw-frame-button-ni:hover { background: #0f766e; }
+    .tampilan-dashboard-pw-text-reset9k2, .tampilan-dashboard-pw-text-unduh-csv-p42 { margin: 0; }
+
+    /* Tabel Grid Figma (#n13141 & #n13142) */
+    .tampilan-dashboard-pw-frame-container-e3 { overflow-x: auto; }
+    .tampilan-dashboard-pw-frame-table32 {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr 0.8fr 1.6fr 1fr;
+      min-width: 680px;
+      width: 100%;
+      border-top: 1px solid #e2e8f0;
+    }
+    .tampilan-dashboard-pw-frame-header-cell5z,
+    .tampilan-dashboard-pw-frame-header-cell5c,
+    .tampilan-dashboard-pw-frame-header-cell5d,
+    .tampilan-dashboard-pw-frame-header-cell-rf,
+    .tampilan-dashboard-pw-frame-header-cell-x9 {
+      background: #f8fafc;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #475569;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .tampilan-dashboard-pw-frame-header-cell5z p,
+    .tampilan-dashboard-pw-frame-header-cell5c p,
+    .tampilan-dashboard-pw-frame-header-cell5d p,
+    .tampilan-dashboard-pw-frame-header-cell-rf p,
+    .tampilan-dashboard-pw-frame-header-cell-x9 p { margin: 0; }
+
+    .sel-tabel-figma {
+      padding: 0.85rem 0.9rem;
+      font-size: 0.85rem;
+      color: #1e293b;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sel-tabel-figma p { margin: 0; }
+    .dot-indikator { width: 8px; height: 8px; border-radius: 9999px; flex-shrink: 0; }
+    .badge-ac-normal {
+      padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700;
+      background: #ecfdf5; color: #047857;
+    }
+    .badge-ac-dry {
+      padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700;
+      background: #eff6ff; color: #1d4ed8;
+    }
+
+    /* SECTION SIMULATOR DATA SENSOR (#n13212) */
+    .tampilan-dashboard-pw-frame-section62 {
+      background: #0f2926;
+      color: #ffffff;
+      border-radius: 1rem;
+      padding: 1.35rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.15rem;
+    }
+    .tampilan-dashboard-pw-frame-container-v1 { display: flex; align-items: center; gap: 0.9rem; }
+    .tampilan-dashboard-pw-frame-text08 {
+      width: 2.5rem; height: 2.5rem; border-radius: 0.65rem; background: rgba(255, 255, 255, 0.1);
+      color: #6ee7b7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .tampilan-dashboard-pw-text-simulator-data-dr2 { font-size: 0.95rem; font-weight: 700; margin: 0; color: #fff; }
+    .tampilan-dashboard-pw-text-uji-respons2q2 { font-size: 0.78rem; color: #9ec5c0; margin: 0.15rem 0 0; }
+
+    .tampilan-dashboard-pw-frame-container-zt { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tampilan-dashboard-pw-frame-button-au,
+    .tampilan-dashboard-pw-frame-button-ex,
+    .tampilan-dashboard-pw-frame-button-hu,
+    .tampilan-dashboard-pw-frame-button-sv,
+    .tampilan-dashboard-pw-frame-button09,
+    .tampilan-dashboard-pw-frame-button-xc {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.5rem 0.85rem; border-radius: 0.6rem;
+      background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #ffffff; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .tampilan-dashboard-pw-frame-button-au:hover,
+    .tampilan-dashboard-pw-frame-button-ex:hover,
+    .tampilan-dashboard-pw-frame-button-hu:hover,
+    .tampilan-dashboard-pw-frame-button-sv:hover,
+    .tampilan-dashboard-pw-frame-button09:hover,
+    .tampilan-dashboard-pw-frame-button-xc:hover {
+      background: rgba(255, 255, 255, 0.18); transform: translateY(-1px);
+    }
+    .tampilan-dashboard-pw-frame-button-au p,
+    .tampilan-dashboard-pw-frame-button-ex p,
+    .tampilan-dashboard-pw-frame-button-hu p,
+    .tampilan-dashboard-pw-frame-button-sv p,
+    .tampilan-dashboard-pw-frame-button09 p,
+    .tampilan-dashboard-pw-frame-button-xc p { margin: 0; }
+
+    .tampilan-dashboard-pw-frame-text-xj,
+    .tampilan-dashboard-pw-frame-text-c0,
+    .tampilan-dashboard-pw-frame-text6t,
+    .tampilan-dashboard-pw-frame-text9q,
+    .tampilan-dashboard-pw-frame-text-ba,
+    .tampilan-dashboard-pw-frame-text-s5 { width: 8px; height: 8px; border-radius: 9999px; }
+    .tampilan-dashboard-pw-frame-text-xj { background: #10b981; }
+    .tampilan-dashboard-pw-frame-text-c0 { background: #f59e0b; }
+    .tampilan-dashboard-pw-frame-text6t { background: #ef4444; }
+    .tampilan-dashboard-pw-frame-text9q { background: #eab308; }
+    .tampilan-dashboard-pw-frame-text-ba { background: #38bdf8; }
+    .tampilan-dashboard-pw-frame-text-s5 { background: #f43f5e; }
   </style>
 </head>
 <body>
 
   <!-- =========================================================
-       SPLASH SCREEN (4 TAMPILAN FIGMA: PAGI, SIANG, SORE, MALAM)
+       SPLASH SCREEN (4 WAKTU: PAGI, SIANG, SORE, MALAM)
        ========================================================= -->
   <div id="splash">
 
-    <!-- 1. TAMPILAN PAGI HARI -->
+    <!-- 1. PAGI -->
     <div id="view-pagi" class="layar-waktu hidden">
       <div id="n134233" class="app-wp-frame-app-wp">
         <span id="n134234" class="app-wp-frame-text-lo"></span>
         <div id="n134235" class="app-wp-frame-container-an"></div>
         <div id="n134236" class="app-wp-frame-container-zm"></div>
         <div id="n134237" class="app-wp-text-si-segar-ol1">
-          <p class="app-wp-text-si-segar-ol2">
-            SI-SEGAR WEATHER AND DENSITY MONITORING
-          </p>
+          <p class="app-wp-text-si-segar-ol2">SI-SEGAR WEATHER AND DENSITY MONITORING</p>
         </div>
         <div id="n134238" class="app-wp-text-selamat-pagi-dk1">
           <p class="app-wp-text-selamat-pagi-dk2">Selamat pagi</p>
         </div>
         <div id="n134239" class="app-wp-text-pantau-kualitas2j1">
-          <p class="app-wp-text-pantau-kualitas2j2">
-            Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara
-            langsung.
-          </p>
+          <p class="app-wp-text-pantau-kualitas2j2">Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara langsung.</p>
         </div>
         <a id="n134240" onclick="masuk()" role="button" tabindex="0" class="app-wp-frame-button-v3">
           <div id="n134241" class="app-wp-text-buka-dashboard641">
             <p class="app-wp-text-buka-dashboard642">Buka dashboard</p>
           </div>
           <span id="n134242" class="app-wp-frame-text91">
-            <img
-              src="assets/134243.svg"
-              alt="icon"
-              width="16"
-              height="16"
-              id="n134243"
-              class="app-wp-vector-icon-k2"
-              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'"
-            />
+            <img src="assets/134243.svg" alt="icon" width="16" height="16" id="n134243" class="app-wp-vector-icon-k2"
+              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'" />
           </span>
         </a>
         <div id="n134245" class="app-wp-text-e81">
-          <p class="app-wp-text-e82">
-            Kesehatan Badan dimulai dari lingkungan yang sehat.
-          </p>
+          <p class="app-wp-text-e82">Kesehatan Badan dimulai dari lingkungan yang sehat.</p>
         </div>
       </div>
     </div>
 
-    <!-- 2. TAMPILAN SIANG HARI -->
+    <!-- 2. SIANG -->
     <div id="view-siang" class="layar-waktu hidden">
       <div id="n133387" class="app-1e-frame-app1e">
         <span id="n133388" class="app-1e-frame-text4b"></span>
         <div id="n133389" class="app-1e-frame-container-fc"></div>
         <div id="n133390" class="app-1e-frame-container-be"></div>
         <div id="n133391" class="app-1e-frame-container0d">
-          <img
-            src="assets/133392.svg"
-            alt="icon"
-            width="30"
-            height="30"
-            id="n133392"
-            class="app-1e-vector-icon-xg"
-            onerror="this.outerHTML='<svg width=\'26\' height=\'26\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M22 12h-4l-3 9L9 3l-3 9H2\'/></svg>'"
-          />
+          <img src="assets/133392.svg" alt="icon" width="30" height="30" id="n133392" class="app-1e-vector-icon-xg"
+            onerror="this.outerHTML='<svg width=\'26\' height=\'26\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M22 12h-4l-3 9L9 3l-3 9H2\'/></svg>'" />
         </div>
         <div id="n133395" class="app-1e-text-sbs-environmen8h1">
           <p class="app-1e-text-sbs-environmen8h2">SBS ENVIRONMENT MONITOR</p>
         </div>
         <div id="n133401" class="app-1e-text-pantau-kualitas-sl1">
-          <p class="app-1e-text-pantau-kualitas-sl2">
-            Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara
-            langsung.
-          </p>
+          <p class="app-1e-text-pantau-kualitas-sl2">Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara langsung.</p>
         </div>
         <a id="n133403" onclick="masuk()" role="button" tabindex="0" class="app-1e-frame-button-en">
           <div id="n133404" class="app-1e-text-buka-dashboard-bq1">
             <p class="app-1e-text-buka-dashboard-bq2">Buka dashboard</p>
           </div>
           <span id="n133406" class="app-1e-frame-text-xs">
-            <img
-              src="assets/133407.svg"
-              alt="icon"
-              width="16"
-              height="16"
-              id="n133407"
-              class="app-1e-vector-icon-mr"
-              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'"
-            />
+            <img src="assets/133407.svg" alt="icon" width="16" height="16" id="n133407" class="app-1e-vector-icon-mr"
+              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'" />
           </span>
         </a>
         <div id="n133410" class="app-1e-text-sistem-minimum-kr1">
-          <p class="app-1e-text-sistem-minimum-kr2">
-            Sistem Minimum 1 &amp; 2 · Real-time monitoring
-          </p>
+          <p class="app-1e-text-sistem-minimum-kr2">Sistem Minimum 1 &amp; 2 · Real-time monitoring</p>
         </div>
         <div id="n134230" class="app-1e-text-selamat-siang-ts1">
           <p class="app-1e-text-selamat-siang-ts2">Selamat siang</p>
@@ -350,22 +591,15 @@
       </div>
     </div>
 
-    <!-- 3. TAMPILAN SORE HARI -->
+    <!-- 3. SORE -->
     <div id="view-sore" class="layar-waktu hidden">
       <div id="n133952" class="app-pm-frame-app-pm">
         <span id="n133953" class="app-pm-frame-text-el"></span>
         <div id="n133954" class="app-pm-frame-container-js"></div>
         <div id="n133955" class="app-pm-frame-container8r"></div>
         <div id="n133956" class="app-pm-frame-container-xq">
-          <img
-            src="assets/133957.svg"
-            alt="icon"
-            width="30"
-            height="30"
-            id="n133957"
-            class="app-pm-vector-icon-mp"
-            onerror="this.outerHTML='<svg width=\'26\' height=\'26\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M22 12h-4l-3 9L9 3l-3 9H2\'/></svg>'"
-          />
+          <img src="assets/133957.svg" alt="icon" width="30" height="30" id="n133957" class="app-pm-vector-icon-mp"
+            onerror="this.outerHTML='<svg width=\'26\' height=\'26\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M22 12h-4l-3 9L9 3l-3 9H2\'/></svg>'" />
         </div>
         <div id="n133960" class="app-pm-text-sbs-environmen-xb1">
           <p class="app-pm-text-sbs-environmen-xb2">SBS ENVIRONMENT MONITOR</p>
@@ -374,36 +608,24 @@
           <p class="app-pm-text-selamat-sore-ma2">Selamat sore</p>
         </div>
         <div id="n133966" class="app-pm-text-pantau-kualitas-jd1">
-          <p class="app-pm-text-pantau-kualitas-jd2">
-            Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara
-            langsung.
-          </p>
+          <p class="app-pm-text-pantau-kualitas-jd2">Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara langsung.</p>
         </div>
         <a id="n133968" onclick="masuk()" role="button" tabindex="0" class="app-pm-frame-button-h3">
           <div id="n133969" class="app-pm-text-buka-dashboard-s41">
             <p class="app-pm-text-buka-dashboard-s42">Buka dashboard</p>
           </div>
           <span id="n133971" class="app-pm-frame-text-yh">
-            <img
-              src="assets/133972.svg"
-              alt="icon"
-              width="16"
-              height="16"
-              id="n133972"
-              class="app-pm-vector-icon-vk"
-              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'"
-            />
+            <img src="assets/133972.svg" alt="icon" width="16" height="16" id="n133972" class="app-pm-vector-icon-vk"
+              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'" />
           </span>
         </a>
         <div id="n133975" class="app-pm-text-sistem-minimum-qd1">
-          <p class="app-pm-text-sistem-minimum-qd2">
-            Sistem Minimum 1 &amp; 2 · Real-time monitoring
-          </p>
+          <p class="app-pm-text-sistem-minimum-qd2">Sistem Minimum 1 &amp; 2 · Real-time monitoring</p>
         </div>
       </div>
     </div>
 
-    <!-- 4. TAMPILAN MALAM HARI -->
+    <!-- 4. MALAM -->
     <div id="view-malam" class="layar-waktu hidden">
       <div id="n139" class="tampilan-awal-malam-6s-frame-tampilan-awal6s">
         <div id="n13297" class="tampilan-awal-malam-6s-frame-app-eh">
@@ -411,43 +633,25 @@
           <div id="n13299" class="tampilan-awal-malam-6s-frame-container-c7"></div>
           <div id="n13300" class="tampilan-awal-malam-6s-frame-container-aa"></div>
           <div id="n13305" class="tampilan-awal-malam-6s-text-si-segar7d1">
-            <p class="tampilan-awal-malam-6s-text-si-segar7d2">
-              SI-SEGAR WEATHER AND DENSITY MONITORING
-            </p>
+            <p class="tampilan-awal-malam-6s-text-si-segar7d2">SI-SEGAR WEATHER AND DENSITY MONITORING</p>
           </div>
           <div id="n13308" class="tampilan-awal-malam-6s-text-selamat-malam-u21">
-            <p class="tampilan-awal-malam-6s-text-selamat-malam-u22">
-              Selamat malam
-            </p>
+            <p class="tampilan-awal-malam-6s-text-selamat-malam-u22">Selamat malam</p>
           </div>
           <div id="n13311" class="tampilan-awal-malam-6s-text-pantau-kualitas1k1">
-            <p class="tampilan-awal-malam-6s-text-pantau-kualitas1k2">
-              Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara
-              langsung.
-            </p>
+            <p class="tampilan-awal-malam-6s-text-pantau-kualitas1k2">Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara langsung.</p>
           </div>
           <a id="n13313" onclick="masuk()" role="button" tabindex="0" class="tampilan-awal-malam-6s-frame-button-fi">
             <div id="n13314" class="tampilan-awal-malam-6s-text-buka-dashboard-if1">
-              <p class="tampilan-awal-malam-6s-text-buka-dashboard-if2">
-                Buka dashboard
-              </p>
+              <p class="tampilan-awal-malam-6s-text-buka-dashboard-if2">Buka dashboard</p>
             </div>
             <span id="n13316" class="tampilan-awal-malam-6s-frame-text-wd">
-              <img
-                src="assets/13317.svg"
-                alt="icon"
-                width="16"
-                height="16"
-                id="n13317"
-                class="tampilan-awal-malam-6s-vector-icon7e"
-                onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'"
-              />
+              <img src="assets/13317.svg" alt="icon" width="16" height="16" id="n13317" class="tampilan-awal-malam-6s-vector-icon7e"
+                onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'" />
             </span>
           </a>
           <div id="n13320" class="tampilan-awal-malam-6s-text-yo1">
-            <p class="tampilan-awal-malam-6s-text-yo2">
-              Kesehatan Badan dimulai dari lingkungan yang sehat.
-            </p>
+            <p class="tampilan-awal-malam-6s-text-yo2">Kesehatan Badan dimulai dari lingkungan yang sehat.</p>
           </div>
         </div>
       </div>
@@ -456,135 +660,458 @@
   </div>
 
   <!-- =========================================================
-       LAYOUT UTAMA DASHBOARD
+       TAMPILAN DASHBOARD & STATISTIK DARI KODE FIGMA (#n1310)
        ========================================================= -->
-  <div class="flex flex-col md:flex-row min-h-screen">
+  <div id="n1310" class="tampilan-dashboard-pw-frame-tampilan-dashboard-pw">
 
-    <!-- Sidebar kiri -->
-    <aside class="md:w-60 md:shrink-0 md:sticky md:top-0 md:h-screen p-4 text-white" style="background:#0f3d3e">
-      <div class="mb-4 md:mb-8 md:px-2">
-        <p class="text-lg font-extrabold">Monitor SBS</p>
-        <p class="text-sm" style="color:#a9cbc6">Sistem Minimum 1 &amp; 2</p>
-      </div>
-      <nav class="flex md:flex-col gap-1">
-        <button id="nav-dashboard" class="nav-btn aktif" onclick="tampilTab('dashboard')">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-          Dashboard
-        </button>
-        <button id="nav-statistik" class="nav-btn" onclick="tampilTab('statistik')">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
-          Statistik
-        </button>
-      </nav>
-    </aside>
+    <!-- KONTEN UTAMA KANAN (#n1311) -->
+    <div id="n1311" class="tampilan-dashboard-pw-frame-app-ev">
 
-    <!-- Konten utama -->
-    <main class="flex-1 min-w-0 p-4 md:p-6">
-      <div class="max-w-5xl mx-auto space-y-6">
-
-        <!-- Header -->
-        <div class="card flex flex-wrap gap-3 justify-between items-center">
-          <div>
-            <h1 class="text-2xl font-bold">Sistem Preventif Sick Building Syndrome (SBS)</h1>
-            <p class="text-sm text-slate-500">Integrasi Sistem Minimum 1, Sistem Minimum 2 &amp; Kontrol AC Otomatis</p>
+      <!-- HEADER (#n1315) -->
+      <header id="n1315" class="tampilan-dashboard-pw-frame-header-mz">
+        <div id="n1316" class="tampilan-dashboard-pw-frame-container-by">
+          <div id="n1317" class="tampilan-dashboard-pw-frame-paragraph0x">
+            <div id="n1318" class="tampilan-dashboard-pw-text-sistem-preventif641">
+              <p class="tampilan-dashboard-pw-text-sistem-preventif642">SISTEM PREVENTIF</p>
+            </div>
           </div>
-          <span id="koneksi-badge" class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-            Menghubungkan ke Firebase...
-          </span>
+          <div id="n1320" class="tampilan-dashboard-pw-frame-heading1-bj">
+            <div id="n1321" class="tampilan-dashboard-pw-text-sick-building-mk1">
+              <p class="tampilan-dashboard-pw-text-sick-building-mk2">Sick Building Syndrome</p>
+            </div>
+          </div>
+          <div id="n1323" class="tampilan-dashboard-pw-frame-paragraph0i">
+            <div id="n1324" class="tampilan-dashboard-pw-text-integrasi-sensor-jn1">
+              <p class="tampilan-dashboard-pw-text-integrasi-sensor-jn2">Integrasi sensor ruangan dan kontrol AC otomatis</p>
+            </div>
+          </div>
+        </div>
+        <div id="n1328" class="tampilan-dashboard-pw-frame-container-vb">
+          <span id="n1329" class="tampilan-dashboard-pw-frame-text6c"></span>
+          <div id="n1330" class="tampilan-dashboard-pw-text-terhubung-real-nq1">
+            <p id="koneksi-badge" class="tampilan-dashboard-pw-text-terhubung-real-nq2">Menghubungkan...</p>
+          </div>
+        </div>
+      </header>
+
+      <div id="n13246" class="tampilan-dashboard-pw-frame-container-margin-e7">
+
+        <!-- =========================================
+             TAB 1: DASHBOARD (#n1332)
+             ========================================= -->
+        <div id="n1332" class="tampilan-dashboard-pw-frame-container9s">
+
+          <!-- 3 Kartu Sensor & AC (#n1333) -->
+          <section id="n1333" class="tampilan-dashboard-pw-frame-section-yr">
+
+            <!-- Kartu 1: Suhu Ruangan -->
+            <article id="n1334" class="tampilan-dashboard-pw-frame-article-fm">
+              <div id="n1335" class="tampilan-dashboard-pw-frame-container4l">
+                <span id="n1336" class="tampilan-dashboard-pw-frame-text1o">
+                  <img src="assets/1337.svg" alt="icon" width="18" height="18" id="n1337" class="tampilan-dashboard-pw-vector-icon-qn"
+                    onerror="this.outerHTML='<svg width=\'18\' height=\'18\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><path d=\'M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z\'/></svg>'" />
+                </span>
+                <span id="n1340" class="tampilan-dashboard-pw-frame-text-y1">
+                  <div id="n1341" class="tampilan-dashboard-pw-text-stabil921">
+                    <p id="badge-suhu" class="tampilan-dashboard-pw-text-stabil922">Stabil</p>
+                  </div>
+                </span>
+              </div>
+              <div id="n1343" class="tampilan-dashboard-pw-frame-paragraph-v4">
+                <div id="n1344" class="tampilan-dashboard-pw-text-suhu-ruangan-px1">
+                  <p class="tampilan-dashboard-pw-text-suhu-ruangan-px2">Suhu ruangan</p>
+                </div>
+              </div>
+              <div id="n1356" class="tampilan-dashboard-pw-frame-container-margin-g2">
+                <div id="n1346" class="tampilan-dashboard-pw-frame-container-bz">
+                  <div id="n1347" class="tampilan-dashboard-pw-text8n01">
+                    <p id="val-suhu" class="tampilan-dashboard-pw-text8n02">24.8</p>
+                  </div>
+                  <div id="n1350" class="tampilan-dashboard-pw-text-ca81">
+                    <p class="tampilan-dashboard-pw-text-ca82">°C</p>
+                  </div>
+                </div>
+              </div>
+              <div id="n1357" class="tampilan-dashboard-pw-frame-container-margin51">
+                <div id="n1352" class="tampilan-dashboard-pw-frame-container-o6">
+                  <div id="n1353" class="tampilan-dashboard-pw-text-rentang-nyaman-d51">
+                    <p class="tampilan-dashboard-pw-text-rentang-nyaman-d52">Rentang nyaman 23–26°C</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Kartu 2: Kelembapan -->
+            <article id="n1358" class="tampilan-dashboard-pw-frame-article-u0">
+              <div id="n1359" class="tampilan-dashboard-pw-frame-container-iz">
+                <span id="n1360" class="tampilan-dashboard-pw-frame-text23">
+                  <img src="assets/1361.svg" alt="icon" width="18" height="18" id="n1361" class="tampilan-dashboard-pw-vector-icon-d4"
+                    onerror="this.outerHTML='<svg width=\'18\' height=\'18\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><path d=\'M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z\'/></svg>'" />
+                </span>
+                <span id="n1364" class="tampilan-dashboard-pw-frame-text-tz">
+                  <div id="n1365" class="tampilan-dashboard-pw-text-normal501">
+                    <p id="badge-lembap" class="tampilan-dashboard-pw-text-normal502">Normal</p>
+                  </div>
+                </span>
+              </div>
+              <div id="n1366" class="tampilan-dashboard-pw-frame-paragraph7x">
+                <div id="n1367" class="tampilan-dashboard-pw-text-kelembapan-iy1">
+                  <p class="tampilan-dashboard-pw-text-kelembapan-iy2">Kelembapan</p>
+                </div>
+              </div>
+              <div id="n1375" class="tampilan-dashboard-pw-frame-container-margin-ix">
+                <div id="n1368" class="tampilan-dashboard-pw-frame-container-ib">
+                  <div id="n1369" class="tampilan-dashboard-pw-text58-tc1">
+                    <p id="val-lembap" class="tampilan-dashboard-pw-text58-tc2">58</p>
+                  </div>
+                  <div id="n1371" class="tampilan-dashboard-pw-text-at1">
+                    <p class="tampilan-dashboard-pw-text-at2">%</p>
+                  </div>
+                </div>
+              </div>
+              <div id="n1376" class="tampilan-dashboard-pw-frame-container-margin-g0">
+                <div id="n1372" class="tampilan-dashboard-pw-frame-container7w">
+                  <div id="n1373" class="tampilan-dashboard-pw-text-ideal-kelembapan-wv1">
+                    <p class="tampilan-dashboard-pw-text-ideal-kelembapan-wv2">Ideal kelembapan 40–60%</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Kartu 3: Kontrol AC · Sismin 2 -->
+            <article id="n1377" class="tampilan-dashboard-pw-frame-article4z">
+              <div id="n1378" class="tampilan-dashboard-pw-frame-container5m">
+                <span id="n1379" class="tampilan-dashboard-pw-frame-text-ul">
+                  <img src="assets/1380.svg" alt="icon" width="18" height="18" id="n1380" class="tampilan-dashboard-pw-vector-icon-p1"
+                    onerror="this.outerHTML='<svg width=\'18\' height=\'18\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><path d=\'M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2\'/></svg>'" />
+                </span>
+                <span id="n1382" class="tampilan-dashboard-pw-frame-text-b3">
+                  <div id="n1383" class="tampilan-dashboard-pw-text-otomatis-m41">
+                    <p class="tampilan-dashboard-pw-text-otomatis-m42">Otomatis</p>
+                  </div>
+                </span>
+              </div>
+              <div id="n1384" class="tampilan-dashboard-pw-frame-paragraph-x5">
+                <div id="n1385" class="tampilan-dashboard-pw-text-kontrol-ac861">
+                  <p class="tampilan-dashboard-pw-text-kontrol-ac862">Kontrol AC · Sismin 2</p>
+                </div>
+              </div>
+              <div id="n1386" class="tampilan-dashboard-pw-frame-container-j7">
+                <span id="n1387" class="tampilan-dashboard-pw-frame-text-u8">
+                  <img src="assets/1388.svg" alt="icon" width="17" height="17" id="n1388" class="tampilan-dashboard-pw-vector-icon8t"
+                    onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\'><polyline points=\'20 6 9 17 4 12\'/></svg>'" />
+                </span>
+                <div id="n1391" class="tampilan-dashboard-pw-text-mode-normal-wv1">
+                  <p id="val-ac" class="tampilan-dashboard-pw-text-mode-normal-wv2">Mode Normal</p>
+                </div>
+              </div>
+              <div id="n1396" class="tampilan-dashboard-pw-frame-container-margin-ty">
+                <div id="n1393" class="tampilan-dashboard-pw-frame-container-at">
+                  <div id="n1394" class="tampilan-dashboard-pw-text-kontrol-adaptif-g01">
+                    <p class="tampilan-dashboard-pw-text-kontrol-adaptif-g02">Kontrol adaptif sedang aktif</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </section>
+
+          <!-- Indikator Sistem Minimum 1 (#n1397) -->
+          <section id="n1397" class="tampilan-dashboard-pw-frame-section-ix">
+            <div id="n1398" class="tampilan-dashboard-pw-frame-container-ro">
+              <img src="assets/1399.svg" alt="icon" width="23" height="23" id="n1399" class="tampilan-dashboard-pw-vector-icon-gn"
+                onerror="this.outerHTML='<svg width=\'22\' height=\'22\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.2\'><path d=\'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\'/></svg>'" />
+            </div>
+            <div id="n13102" class="tampilan-dashboard-pw-frame-container4y">
+              <div id="n13103" class="tampilan-dashboard-pw-frame-paragraph-tx">
+                <div id="n13104" class="tampilan-dashboard-pw-text-indikator-sistem-z41">
+                  <p id="label-sismin1" class="tampilan-dashboard-pw-text-indikator-sistem-z42">INDIKATOR SISTEM MINIMUM 1</p>
+                </div>
+              </div>
+              <div id="n13106" class="tampilan-dashboard-pw-frame-heading2d2">
+                <div id="n13107" class="tampilan-dashboard-pw-text-suhu-normal211">
+                  <p id="teks-kondisi" class="tampilan-dashboard-pw-text-suhu-normal212">Suhu normal — ruangan sehat</p>
+                </div>
+              </div>
+              <div id="n13113" class="tampilan-dashboard-pw-frame-text-margin-bw">
+                <span id="n13109" class="tampilan-dashboard-pw-frame-text-zr">
+                  <div id="n13110" class="tampilan-dashboard-pw-text-pertahanka-sirkulasi-et1">
+                    <p id="teks-saran" class="tampilan-dashboard-pw-text-pertahanka-sirkulasi-et2">
+                      Kondisi ruangan baik. Pertahankan sirkulasi udara dan kebersihan ruangan.
+                    </p>
+                  </div>
+                </span>
+              </div>
+            </div>
+            <div id="n13114" class="tampilan-dashboard-pw-frame-container-mx">
+              <span id="n13115" class="tampilan-dashboard-pw-frame-text-xy"></span>
+              <div id="n13116" class="tampilan-dashboard-pw-text-kondisi-baik8z1">
+                <p id="badge-kondisi" class="tampilan-dashboard-pw-text-kondisi-baik8z2">Kondisi baik</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Riwayat Sensor & Tabel (#n13118) -->
+          <section id="n13118" class="tampilan-dashboard-pw-frame-section-yl">
+            <div id="n13119" class="tampilan-dashboard-pw-frame-container9m">
+              <div id="n13120" class="tampilan-dashboard-pw-frame-container2m">
+                <div id="n13121" class="tampilan-dashboard-pw-frame-paragraph-rl">
+                  <div id="n13122" class="tampilan-dashboard-pw-text-riwayat-sensor-oo1">
+                    <p class="tampilan-dashboard-pw-text-riwayat-sensor-oo2">RIWAYAT SENSOR</p>
+                  </div>
+                </div>
+                <div id="n13129" class="tampilan-dashboard-pw-frame-heading27t">
+                  <div id="n13123" class="tampilan-dashboard-pw-frame-heading2-dn">
+                    <div id="n13124" class="tampilan-dashboard-pw-text-laporan-kondisi-ui1">
+                      <p class="tampilan-dashboard-pw-text-laporan-kondisi-ui2">Laporan kondisi ruangan</p>
+                    </div>
+                  </div>
+                </div>
+                <span id="n13126" class="tampilan-dashboard-pw-frame-text-gk">
+                  <div id="n13127" class="tampilan-dashboard-pw-text4-data5j1">
+                    <p class="tampilan-dashboard-pw-text4-data5j2">
+                      <span id="total-data">0</span> data tersimpan untuk analisis
+                    </p>
+                  </div>
+                </span>
+              </div>
+              <div id="n13131" class="tampilan-dashboard-pw-frame-container1g">
+                <a id="n13132" onclick="hapusRiwayat()" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button4d">
+                  <img src="assets/13133.svg" alt="icon" width="15" height="15" id="n13133" class="tampilan-dashboard-pw-vector-icon-fe"
+                    onerror="this.outerHTML='<svg width=\'14\' height=\'14\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><polyline points=\'3 6 5 6 21 6\'/><path d=\'M19 6l-2 14H7L5 6\'/></svg>'" />
+                  <div id="n13135" class="tampilan-dashboard-pw-text-reset9k1">
+                    <p class="tampilan-dashboard-pw-text-reset9k2">Reset</p>
+                  </div>
+                </a>
+                <a id="n13137" onclick="downloadCSV()" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button-ni">
+                  <img src="assets/13138.svg" alt="icon" width="15" height="15" id="n13138" class="tampilan-dashboard-pw-vector-icon6n"
+                    onerror="this.outerHTML='<svg width=\'14\' height=\'14\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><path d=\'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\'/><polyline points=\'7 10 12 15 17 10\'/><line x1=\'12\' y1=\'15\' x2=\'12\' y2=\'3\'/></svg>'" />
+                  <div id="n13140" class="tampilan-dashboard-pw-text-unduh-csv-p41">
+                    <p class="tampilan-dashboard-pw-text-unduh-csv-p42">Unduh CSV</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div id="n13141" class="tampilan-dashboard-pw-frame-container-e3">
+              <div id="n13142" class="tampilan-dashboard-pw-frame-table32">
+                <!-- Header Kolom Tabel -->
+                <div id="n13145" class="tampilan-dashboard-pw-frame-header-cell5z">
+                  <div id="n13146" class="tampilan-dashboard-pw-text-waktu-uy1"><p class="tampilan-dashboard-pw-text-waktu-uy2">Waktu</p></div>
+                </div>
+                <div id="n13148" class="tampilan-dashboard-pw-frame-header-cell5c">
+                  <div id="n13149" class="tampilan-dashboard-pw-text-suhu-ub1"><p class="tampilan-dashboard-pw-text-suhu-ub2">Suhu</p></div>
+                </div>
+                <div id="n13150" class="tampilan-dashboard-pw-frame-header-cell5d">
+                  <div id="n13151" class="tampilan-dashboard-pw-text-kelembapan-ge1"><p class="tampilan-dashboard-pw-text-kelembapan-ge2">Kelembapan</p></div>
+                </div>
+                <div id="n13152" class="tampilan-dashboard-pw-frame-header-cell-rf">
+                  <div id="n13153" class="tampilan-dashboard-pw-text-indikator-kondisi2g1"><p class="tampilan-dashboard-pw-text-indikator-kondisi2g2">Indikator kondisi</p></div>
+                </div>
+                <div id="n13154" class="tampilan-dashboard-pw-frame-header-cell-x9">
+                  <div id="n13155" class="tampilan-dashboard-pw-text-tindakan-ac8a1"><p class="tampilan-dashboard-pw-text-tindakan-ac8a2">Tindakan AC</p></div>
+                </div>
+
+                <!-- Baris Data Dinamis dari Firebase dimasukkan ke sini -->
+                <div id="tabel-riwayat" style="display: contents;"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Simulator Data Sensor (#n13212) -->
+          <section id="n13212" class="tampilan-dashboard-pw-frame-section62">
+            <div id="n13213" class="tampilan-dashboard-pw-frame-container-v1">
+              <span id="n13214" class="tampilan-dashboard-pw-frame-text08">
+                <img src="assets/13215.svg" alt="icon" width="18" height="18" id="n13215" class="tampilan-dashboard-pw-vector-icon-p7"
+                  onerror="this.outerHTML='<svg width=\'18\' height=\'18\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><polygon points=\'13 2 3 14 12 14 11 22 21 10 12 10 13 2\'/></svg>'" />
+              </span>
+              <div id="n13218" class="tampilan-dashboard-pw-frame-container8c">
+                <div id="n13219" class="tampilan-dashboard-pw-frame-bold-text-xb">
+                  <div id="n13220" class="tampilan-dashboard-pw-text-simulator-data-dr1">
+                    <p class="tampilan-dashboard-pw-text-simulator-data-dr2">Simulator data sensor</p>
+                  </div>
+                </div>
+                <div id="n13225" class="tampilan-dashboard-pw-frame-paragraph-margin-ww">
+                  <div id="n13222" class="tampilan-dashboard-pw-frame-paragraph-rp">
+                    <div id="n13223" class="tampilan-dashboard-pw-text-uji-respons2q1">
+                      <p class="tampilan-dashboard-pw-text-uji-respons2q2">Uji respons sistem tanpa perangkat keras</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="n13226" class="tampilan-dashboard-pw-frame-container-zt">
+              <a id="n13227" onclick="simulasiKirimData(25, 50, 1)" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button-au">
+                <span id="n13228" class="tampilan-dashboard-pw-frame-text-xj"></span>
+                <div id="n13229" class="tampilan-dashboard-pw-text-normal8k1"><p class="tampilan-dashboard-pw-text-normal8k2">Normal</p></div>
+              </a>
+              <a id="n13231" onclick="simulasiKirimData(28, 70, 2)" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button-ex">
+                <span id="n13232" class="tampilan-dashboard-pw-frame-text-c0"></span>
+                <div id="n13233" class="tampilan-dashboard-pw-text-hangat0z1"><p class="tampilan-dashboard-pw-text-hangat0z2">Hangat</p></div>
+              </a>
+              <a id="n13234" onclick="simulasiKirimData(32, 85, 3)" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button-hu">
+                <span id="n13235" class="tampilan-dashboard-pw-frame-text6t"></span>
+                <div id="n13236" class="tampilan-dashboard-pw-text-panas3w1"><p class="tampilan-dashboard-pw-text-panas3w2">Panas</p></div>
+              </a>
+              <a id="n13237" onclick="simulasiKirimData(25, 72, 4)" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button-sv">
+                <span id="n13238" class="tampilan-dashboard-pw-frame-text9q"></span>
+                <div id="n13239" class="tampilan-dashboard-pw-text-lembap-yp1"><p class="tampilan-dashboard-pw-text-lembap-yp2">Lembap</p></div>
+              </a>
+              <a id="n13240" onclick="simulasiKirimData(20, 74, 5)" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button09">
+                <span id="n13241" class="tampilan-dashboard-pw-frame-text-ba"></span>
+                <div id="n13242" class="tampilan-dashboard-pw-text-dingin-mb1"><p class="tampilan-dashboard-pw-text-dingin-mb2">Dingin</p></div>
+              </a>
+              <a id="n13243" onclick="simulasiKirimData(19, 88, 6)" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button-xc">
+                <span id="n13244" class="tampilan-dashboard-pw-frame-text-s5"></span>
+                <div id="n13245" class="tampilan-dashboard-pw-text-sangat-lembap361"><p class="tampilan-dashboard-pw-text-sangat-lembap362">Sangat lembap</p></div>
+              </a>
+            </div>
+          </section>
+
         </div>
 
-        <!-- TAB DASHBOARD -->
-        <section id="tab-dashboard" class="space-y-6">
+        <!-- =========================================
+             TAB 2: STATISTIK (GAYA SERAGAM FIGMA)
+             ========================================= -->
+        <div id="tab-statistik" class="tampilan-dashboard-pw-frame-container9s hidden">
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="card">
-              <p class="text-sm text-slate-500">Suhu Ruangan</p>
-              <p class="text-4xl font-bold mt-2"><span id="val-suhu">--</span> °C</p>
-            </div>
-            <div class="card">
-              <p class="text-sm text-slate-500">Status Kelembapan</p>
-              <p class="text-4xl font-bold mt-2"><span id="val-lembap">--</span> %</p>
-            </div>
-            <div class="card">
-              <p class="text-sm text-slate-500">Status Kontrol AC (Sismin 2)</p>
-              <p id="val-ac" class="text-2xl font-bold text-blue-600 mt-3">Menunggu Data...</p>
-            </div>
-          </div>
-
-          <div id="panel-saran" class="p-6 rounded-xl border transition-all bg-slate-200 border-slate-300">
-            <p class="text-sm font-bold text-slate-600">Indikator Sistem Minimum 1</p>
-            <h2 id="teks-kondisi" class="text-2xl font-bold text-slate-800 mt-1">Menunggu pembacaan sensor...</h2>
-            <hr class="my-3 border-slate-300">
-            <p class="text-sm font-semibold text-slate-700">Rekomendasi / Saran Tindakan:</p>
-            <p id="teks-saran" class="text-lg font-medium text-slate-900 mt-1">-</p>
-          </div>
-
-          <div class="card">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-              <div>
-                <h3 class="text-lg font-bold">Laporan Riwayat Kondisi Lembap &amp; Sangat Lembap (Untuk Analisis)</h3>
-                <p class="text-xs text-slate-500">Total data tersimpan: <span id="total-data" class="font-bold text-slate-700">0</span> baris</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <article class="tampilan-dashboard-pw-frame-article-fm">
+              <p class="tampilan-dashboard-pw-text-suhu-ruangan-px2">Total Data Riwayat</p>
+              <div class="tampilan-dashboard-pw-frame-container-bz">
+                <p id="st-total" class="tampilan-dashboard-pw-text8n02">0</p>
+                <p class="tampilan-dashboard-pw-text-ca82">baris</p>
               </div>
-              <div class="flex gap-2">
-                <button onclick="downloadCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition">
-                  📥 Download Laporan (.CSV)
-                </button>
-                <button onclick="hapusRiwayat()" class="px-3 py-2 bg-slate-200 hover:bg-rose-100 hover:text-rose-700 text-slate-700 rounded-lg text-xs font-semibold transition">
-                  🗑️ Reset
-                </button>
+              <p class="tampilan-dashboard-pw-text-rentang-nyaman-d52">Tersimpan di Firebase</p>
+            </article>
+
+            <article class="tampilan-dashboard-pw-frame-article-fm">
+              <p class="tampilan-dashboard-pw-text-suhu-ruangan-px2">Rata-rata Suhu</p>
+              <div class="tampilan-dashboard-pw-frame-container-bz">
+                <p id="st-suhu" class="tampilan-dashboard-pw-text8n02">--</p>
+                <p class="tampilan-dashboard-pw-text-ca82">°C</p>
               </div>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse">
-                <thead>
-                  <tr class="border-b bg-slate-50 text-slate-600 text-sm">
-                    <th class="p-3">Waktu</th>
-                    <th class="p-3">Suhu (°C)</th>
-                    <th class="p-3">Kelembapan (%)</th>
-                    <th class="p-3">Indikator Kondisi</th>
-                    <th class="p-3">Tindakan Sismin 2</th>
-                  </tr>
-                </thead>
-                <tbody id="tabel-riwayat" class="text-sm text-slate-700 divide-y">
-                  <tr><td colspan="5" class="p-3 text-center text-slate-400">Belum ada data laporan.</td></tr>
-                </tbody>
-              </table>
-            </div>
+              <p class="tampilan-dashboard-pw-text-rentang-nyaman-d52">Rentang nyaman 23–26°C</p>
+            </article>
+
+            <article class="tampilan-dashboard-pw-frame-article-u0">
+              <p class="tampilan-dashboard-pw-text-kelembapan-iy2">Rata-rata Kelembapan</p>
+              <div class="tampilan-dashboard-pw-frame-container-ib">
+                <p id="st-lembap" class="tampilan-dashboard-pw-text58-tc2">--</p>
+                <p class="tampilan-dashboard-pw-text-at2">%</p>
+              </div>
+              <p class="tampilan-dashboard-pw-text-ideal-kelembapan-wv2">Ideal kelembapan 40–60%</p>
+            </article>
+
+            <article class="tampilan-dashboard-pw-frame-article4z">
+              <p class="tampilan-dashboard-pw-text-kontrol-ac862">Kelembapan Tertinggi</p>
+              <div class="tampilan-dashboard-pw-frame-container-ib">
+                <p id="st-maks" class="tampilan-dashboard-pw-text58-tc2">--</p>
+                <p class="tampilan-dashboard-pw-text-at2">%</p>
+              </div>
+              <p class="tampilan-dashboard-pw-text-kontrol-adaptif-g02">Puncak kelembapan tercatat</p>
+            </article>
           </div>
 
-          <div class="bg-slate-800 text-white p-5 rounded-xl">
-            <h4 class="text-sm font-bold text-slate-300 mb-3">Simulator Pengiriman Data Sistem Minimum 2 (Uji Coba)</h4>
-            <div class="flex flex-wrap gap-2">
-              <button onclick="simulasiKirimData(25, 50, 1)" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-xs font-semibold">1. Normal - Normal</button>
-              <button onclick="simulasiKirimData(28, 70, 2)" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 rounded text-xs font-semibold">2. Hangat - Lembap</button>
-              <button onclick="simulasiKirimData(32, 85, 3)" class="px-3 py-2 bg-rose-600 hover:bg-rose-500 rounded text-xs font-semibold">3. Panas - Sangat Lembap</button>
-              <button onclick="simulasiKirimData(25, 72, 4)" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 rounded text-xs font-semibold">4. Normal - Lembap</button>
-              <button onclick="simulasiKirimData(20, 74, 5)" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 rounded text-xs font-semibold">5. Dingin - Lembap</button>
-              <button onclick="simulasiKirimData(19, 88, 6)" class="px-3 py-2 bg-rose-600 hover:bg-rose-500 rounded text-xs font-semibold">6. Dingin - Sangat Lembap</button>
+          <section class="tampilan-dashboard-pw-frame-section-yl">
+            <div class="mb-5">
+              <p class="tampilan-dashboard-pw-text-riwayat-sensor-oo2">DISTRIBUSI DATA</p>
+              <p class="tampilan-dashboard-pw-text-laporan-kondisi-ui2">Sebaran kondisi ruangan</p>
+              <p class="tampilan-dashboard-pw-text4-data5j2">Dihitung secara otomatis dari seluruh riwayat pembacaan sensor</p>
             </div>
-          </div>
-        </section>
-
-        <!-- TAB STATISTIK -->
-        <section id="tab-statistik" class="space-y-6 hidden">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="card"><p class="text-sm text-slate-500">Total Data</p><p id="st-total" class="text-3xl font-bold mt-1">0</p></div>
-            <div class="card"><p class="text-sm text-slate-500">Rata-rata Suhu</p><p class="text-3xl font-bold mt-1"><span id="st-suhu">--</span> °C</p></div>
-            <div class="card"><p class="text-sm text-slate-500">Rata-rata Kelembapan</p><p class="text-3xl font-bold mt-1"><span id="st-lembap">--</span> %</p></div>
-            <div class="card"><p class="text-sm text-slate-500">Kelembapan Tertinggi</p><p class="text-3xl font-bold mt-1"><span id="st-maks">--</span> %</p></div>
-          </div>
-          <div class="card">
-            <h3 class="text-lg font-bold">Sebaran kondisi ruangan</h3>
-            <p class="text-xs text-slate-500 mb-4">Dihitung dari seluruh data di tabel riwayat.</p>
             <div id="st-sebaran" class="space-y-4"></div>
-          </div>
-        </section>
+          </section>
+
+        </div>
 
       </div>
-    </main>
+    </div>
+
+    <!-- SIDEBAR KIRI (#n13248) -->
+    <div id="n13248" class="tampilan-dashboard-pw-frame-app-k1">
+      <div id="n13249" class="tampilan-dashboard-pw-frame-container-v2">
+        <div id="n13253" class="tampilan-dashboard-pw-frame-container-fd">
+          <div id="n13254" class="tampilan-dashboard-pw-frame-bold-text4c">
+            <div id="n13255" class="tampilan-dashboard-pw-text-monitor-sbs-tb1">
+              <p class="tampilan-dashboard-pw-text-monitor-sbs-tb2">Monitor SBS</p>
+            </div>
+          </div>
+          <span id="n13257" class="tampilan-dashboard-pw-frame-text79">
+            <div id="n13258" class="tampilan-dashboard-pw-text-pantau-kondisi-w81">
+              <p class="tampilan-dashboard-pw-text-pantau-kondisi-w82">Pantau Kondisi ruangan secara real-time</p>
+            </div>
+          </span>
+        </div>
+      </div>
+
+      <div id="n13295" class="tampilan-dashboard-pw-frame-container-margin0j">
+        <div id="n13261" class="tampilan-dashboard-pw-frame-container-fc">
+          <div id="n13262" class="tampilan-dashboard-pw-text-workspace-i91">
+            <p class="tampilan-dashboard-pw-text-workspace-i92">Workspace</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="n13264" class="tampilan-dashboard-pw-frame-navigation-navigasi-w7">
+        <a id="n13265" onclick="tampilTab('dashboard')" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button78 nav-aktif">
+          <img src="assets/13266.svg" alt="icon" width="18" height="18" id="n13266" class="tampilan-dashboard-pw-vector-icon-a5"
+            onerror="this.outerHTML='<svg width=\'18\' height=\'18\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><rect x=\'3\' y=\'3\' width=\'7\' height=\'9\'/><rect x=\'14\' y=\'3\' width=\'7\' height=\'5\'/><rect x=\'14\' y=\'12\' width=\'7\' height=\'9\'/><rect x=\'3\' y=\'16\' width=\'7\' height=\'5\'/></svg>'" />
+          <span id="n13271" class="tampilan-dashboard-pw-frame-text5h">
+            <div id="n13272" class="tampilan-dashboard-pw-text-dashboard2k1">
+              <p class="tampilan-dashboard-pw-text-dashboard2k2">Dashboard</p>
+            </div>
+          </span>
+        </a>
+        <a id="n13274" onclick="tampilTab('statistik')" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button-om">
+          <img src="assets/13275.svg" alt="icon" width="18" height="18" id="n13275" class="tampilan-dashboard-pw-vector-icon-dl"
+            onerror="this.outerHTML='<svg width=\'18\' height=\'18\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><path d=\'M4 20V10M10 20V4M16 20v-8M22 20H2\'/></svg>'" />
+          <span id="n13277" class="tampilan-dashboard-pw-frame-text-zn">
+            <div id="n13278" class="tampilan-dashboard-pw-text-statistik0a1">
+              <p class="tampilan-dashboard-pw-text-statistik0a2">Statistik</p>
+            </div>
+          </span>
+        </a>
+      </div>
+
+      <div id="n13296" class="tampilan-dashboard-pw-frame-container-align-pi">
+        <div id="n13279" class="tampilan-dashboard-pw-frame-container-p9">
+          <div id="n13280" class="tampilan-dashboard-pw-frame-container-r9">
+            <img src="assets/13281.svg" alt="icon" width="16" height="16" id="n13281" class="tampilan-dashboard-pw-vector-icon2a"
+              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.2\'><path d=\'M22 12h-4l-3 9L9 3l-3 9H2\'/></svg>'" />
+          </div>
+          <div id="n13283" class="tampilan-dashboard-pw-frame-container-oc">
+            <div id="n13284" class="tampilan-dashboard-pw-frame-bold-text-zd">
+              <div id="n13285" class="tampilan-dashboard-pw-text-sistem-aktif-ae1">
+                <p class="tampilan-dashboard-pw-text-sistem-aktif-ae2">Sistem aktif</p>
+              </div>
+            </div>
+            <div id="n13289" class="tampilan-dashboard-pw-frame-text-margin-m2">
+              <span id="n13286" class="tampilan-dashboard-pw-frame-text-lf">
+                <div id="n13287" class="tampilan-dashboard-pw-text-semua-sensor-wg1">
+                  <p class="tampilan-dashboard-pw-text-semua-sensor-wg2">Semua sensor terhubung</p>
+                </div>
+              </span>
+            </div>
+          </div>
+          <span id="n13290" class="tampilan-dashboard-pw-frame-text3g"></span>
+        </div>
+      </div>
+
+      <div id="n13291" class="tampilan-dashboard-pw-frame-container-sf">
+        <div id="n13292" class="tampilan-dashboard-pw-text-sbs-monitor-he1">
+          <p class="tampilan-dashboard-pw-text-sbs-monitor-he2">SBS Monitor</p>
+        </div>
+        <span id="n13293" class="tampilan-dashboard-pw-frame-text6d">
+          <div id="n13294" class="tampilan-dashboard-pw-text0-bk1">
+            <p class="tampilan-dashboard-pw-text0-bk2">v1.0</p>
+          </div>
+        </span>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Script Pengatur Tampilan Waktu Otomatis & Navigasi -->
+  <!-- Script Pengatur Sapaan Waktu & Navigasi Tab -->
   <script>
     function terapkanTemaWaktu() {
       const jam = new Date().getHours();
@@ -592,9 +1119,7 @@
 
       ['pagi', 'siang', 'sore', 'malam'].forEach(w => {
         const el = document.getElementById('view-' + w);
-        if (el) {
-          el.classList.toggle('hidden', w !== waktuAktif);
-        }
+        if (el) el.classList.toggle('hidden', w !== waktuAktif);
       });
     }
 
@@ -606,10 +1131,12 @@
     }
 
     function tampilTab(nama) {
-      ['dashboard', 'statistik'].forEach(t => {
-        document.getElementById('tab-' + t).classList.toggle('hidden', t !== nama);
-        document.getElementById('nav-' + t).classList.toggle('aktif', t === nama);
-      });
+      const isDash = nama === 'dashboard';
+      document.getElementById('n1332').classList.toggle('hidden', !isDash);
+      document.getElementById('tab-statistik').classList.toggle('hidden', isDash);
+
+      document.getElementById('n13265').classList.toggle('nav-aktif', isDash);
+      document.getElementById('n13274').classList.toggle('nav-aktif', !isDash);
     }
   </script>
 
@@ -636,13 +1163,68 @@
 
     const saranDry = "Segera ubah AC ke mode dry dan pastikan kebersihan ruanganmu tetap terjaga ya.. Salam sehat";
     const daftarKondisi = {
-      1: { indikator: "Suhu normal - ruangan normal", saran: "Jaga kondisi ruangan agar tetap sehat", tema: "bg-emerald-100 border-emerald-400", bar: "bg-emerald-500" },
-      2: { indikator: "Suhu hangat - ruangan lembap", saran: "Waspada ruanganmu lembap, pastikan tetap ada sirkulasi Udara di ruanganmu ya", tema: "bg-amber-100 border-amber-400", bar: "bg-amber-500" },
-      3: { indikator: "Suhu panas - ruangan sangat lembap", saran: saranDry, tema: "bg-rose-100 border-rose-400", bar: "bg-rose-500" },
-      4: { indikator: "Suhu normal - ruangan lembap", saran: "Waspada ruanganmu lembap", tema: "bg-amber-100 border-amber-400", bar: "bg-amber-500" },
-      5: { indikator: "Suhu dingin - ruangan lembap", saran: "Waspada ruanganmu lembap", tema: "bg-amber-100 border-amber-400", bar: "bg-amber-500" },
-      6: { indikator: "Suhu dingin - ruangan sangat lembap", saran: saranDry, tema: "bg-rose-100 border-rose-400", bar: "bg-rose-500" }
+      1: {
+        indikator: "Suhu normal - ruangan normal",
+        tampilan: "Suhu normal — ruangan sehat",
+        saran: "Kondisi ruangan baik. Pertahankan sirkulasi udara dan kebersihan ruangan.",
+        statusPill: "Kondisi baik",
+        badgeSuhu: "Stabil",
+        badgeLembap: "Normal",
+        bgBanner: "#ecfdf5", borderBanner: "#6ee7b7", teksBanner: "#064e3b", dotWarna: "#10b981", bar: "bg-emerald-500"
+      },
+      2: {
+        indikator: "Suhu hangat - ruangan lembap",
+        tampilan: "Suhu hangat — ruangan lembap",
+        saran: "Waspada ruanganmu lembap, pastikan tetap ada sirkulasi udara di ruanganmu ya.",
+        statusPill: "Perlu perhatian",
+        badgeSuhu: "Hangat",
+        badgeLembap: "Lembap",
+        bgBanner: "#fffbeb", borderBanner: "#fcd34d", teksBanner: "#78350f", dotWarna: "#f59e0b", bar: "bg-amber-500"
+      },
+      3: {
+        indikator: "Suhu panas - ruangan sangat lembap",
+        tampilan: "Suhu panas — sangat lembap",
+        saran: saranDry,
+        statusPill: "Waspada tinggi",
+        badgeSuhu: "Panas",
+        badgeLembap: "Sangat Lembap",
+        bgBanner: "#fff1f2", borderBanner: "#fda4af", teksBanner: "#881337", dotWarna: "#f43f5e", bar: "bg-rose-500"
+      },
+      4: {
+        indikator: "Suhu normal - ruangan lembap",
+        tampilan: "Suhu normal — ruangan lembap",
+        saran: "Waspada ruanganmu lembap, jaga sirkulasi udara tetap lancar.",
+        statusPill: "Perlu perhatian",
+        badgeSuhu: "Stabil",
+        badgeLembap: "Lembap",
+        bgBanner: "#fffbeb", borderBanner: "#fcd34d", teksBanner: "#78350f", dotWarna: "#f59e0b", bar: "bg-amber-500"
+      },
+      5: {
+        indikator: "Suhu dingin - ruangan lembap",
+        tampilan: "Suhu dingin — ruangan lembap",
+        saran: "Waspada ruanganmu lembap pada suhu dingin.",
+        statusPill: "Perlu perhatian",
+        badgeSuhu: "Dingin",
+        badgeLembap: "Lembap",
+        bgBanner: "#fffbeb", borderBanner: "#fcd34d", teksBanner: "#78350f", dotWarna: "#f59e0b", bar: "bg-amber-500"
+      },
+      6: {
+        indikator: "Suhu dingin - ruangan sangat lembap",
+        tampilan: "Suhu dingin — sangat lembap",
+        saran: saranDry,
+        statusPill: "Waspada tinggi",
+        badgeSuhu: "Dingin",
+        badgeLembap: "Sangat Lembap",
+        bgBanner: "#fff1f2", borderBanner: "#fda4af", teksBanner: "#881337", dotWarna: "#f43f5e", bar: "bg-rose-500"
+      }
     };
+
+    function warnaDotDariIndikator(teks) {
+      const t = String(teks).toLowerCase();
+      if (t.includes("sangat lembap") || t.includes("panas")) return "#f43f5e";
+      if (t.includes("lembap") || t.includes("hangat")) return "#f59e0b";
+      return "#10b981";
+    }
 
     function hitungStatistik() {
       const d = semuaDataRiwayat, n = d.length;
@@ -651,45 +1233,63 @@
       document.getElementById('st-suhu').innerText = rata('suhu');
       document.getElementById('st-lembap').innerText = rata('kelembapan');
       document.getElementById('st-maks').innerText = n ? Math.max(...d.map(x => Number(x.kelembapan))) : "--";
+
       document.getElementById('st-sebaran').innerHTML = Object.values(daftarKondisi).map(k => {
-        const jml = d.filter(x => x.indikator === k.indikator).length;
+        const jml = d.filter(x => x.indikator === k.indikator || x.indikator === k.tampilan).length;
         const persen = n ? Math.round(jml / n * 100) : 0;
         return `<div>
-          <div class="flex justify-between text-sm mb-1"><span>${k.indikator}</span><span class="font-semibold">${jml} data (${persen}%)</span></div>
-          <div class="h-3 bg-slate-100 rounded-full overflow-hidden"><div class="h-full rounded-full ${k.bar}" style="width:${persen}%"></div></div>
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-slate-700">${k.tampilan}</span>
+            <span class="font-bold text-slate-900">${jml} data (${persen}%)</span>
+          </div>
+          <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full rounded-full ${k.bar}" style="width:${persen}%"></div>
+          </div>
         </div>`;
       }).join("");
     }
     hitungStatistik();
 
+    // 1. Pembacaan Real-Time dari node 'sensor_terkini'
     onValue(ref(db, 'sensor_terkini'), (snapshot) => {
-      document.getElementById('koneksi-badge').innerText = "Terhubung (Real-Time)";
-      document.getElementById('koneksi-badge').className = "px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800";
+      document.getElementById('koneksi-badge').innerText = "Terhubung real-time";
 
       const data = snapshot.val();
       if (!data) return;
 
       document.getElementById('val-suhu').innerText = data.suhu;
       document.getElementById('val-lembap').innerText = data.kelembapan;
-      document.getElementById('val-ac').innerText = data.status_ac;
+
+      const labelAC = String(data.status_ac).includes("Dry") ? "Mode Dry" : "Mode Normal";
+      document.getElementById('val-ac').innerText = labelAC;
 
       const info = daftarKondisi[data.kode_kondisi];
       if (info) {
-        document.getElementById('teks-kondisi').innerText = info.indikator;
+        document.getElementById('teks-kondisi').innerText = info.tampilan;
         document.getElementById('teks-saran').innerText = info.saran;
-        document.getElementById('panel-saran').className = `p-6 rounded-xl border transition-all ${info.tema}`;
+        document.getElementById('badge-kondisi').innerText = info.statusPill;
+        document.getElementById('badge-suhu').innerText = info.badgeSuhu;
+        document.getElementById('badge-lembap').innerText = info.badgeLembap;
+
+        const banner = document.getElementById('n1397');
+        banner.style.backgroundColor = info.bgBanner;
+        banner.style.borderColor = info.borderBanner;
+        document.getElementById('teks-kondisi').style.color = info.teksBanner;
+        document.getElementById('teks-saran').style.color = info.teksBanner;
+        document.getElementById('n13115').style.backgroundColor = info.dotWarna;
       }
     });
 
+    // 2. Tabel Riwayat dari node 'riwayat_lembap'
     onValue(ref(db, 'riwayat_lembap'), (snapshot) => {
-      const tbody = document.getElementById('tabel-riwayat');
-      tbody.innerHTML = "";
+      const container = document.getElementById('tabel-riwayat');
+      container.innerHTML = "";
       const logs = snapshot.val();
 
       if (!logs) {
         semuaDataRiwayat = [];
         document.getElementById('total-data').innerText = "0";
-        tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-400">Belum ada data laporan.</td></tr>`;
+        container.innerHTML = `<div class="sel-tabel-figma" style="grid-column: span 5; justify-content: center; color: #94a3b8;">Belum ada data laporan.</div>`;
         hitungStatistik();
         return;
       }
@@ -698,17 +1298,28 @@
       document.getElementById('total-data').innerText = semuaDataRiwayat.length;
 
       semuaDataRiwayat.slice(0, 10).forEach(item => {
-        tbody.innerHTML += `<tr class="hover:bg-slate-50">
-          <td class="p-3">${item.waktu}</td>
-          <td class="p-3 font-semibold">${item.suhu} °C</td>
-          <td class="p-3 font-semibold">${item.kelembapan} %</td>
-          <td class="p-3">${item.indikator}</td>
-          <td class="p-3 text-blue-600 font-medium">${item.status_ac}</td>
-        </tr>`;
+        const dotColor = warnaDotDariIndikator(item.indikator);
+        const isDry = String(item.status_ac).toLowerCase().includes("dry");
+        const teksAC = isDry ? "Mode Dry" : "Mode Normal";
+        const kelasBadgeAC = isDry ? "badge-ac-dry" : "badge-ac-normal";
+
+        container.innerHTML += `
+          <div class="sel-tabel-figma"><p>${item.waktu}</p></div>
+          <div class="sel-tabel-figma"><p class="font-bold">${item.suhu}°C</p></div>
+          <div class="sel-tabel-figma"><p class="font-bold">${item.kelembapan}%</p></div>
+          <div class="sel-tabel-figma">
+            <span class="dot-indikator" style="background:${dotColor}"></span>
+            <p>${item.indikator}</p>
+          </div>
+          <div class="sel-tabel-figma">
+            <span class="${kelasBadgeAC}">${teksAC}</span>
+          </div>
+        `;
       });
       hitungStatistik();
     });
 
+    // 3. Unduh CSV
     window.downloadCSV = function() {
       if (semuaDataRiwayat.length === 0) {
         alert("Belum ada data laporan untuk diunduh.");
@@ -729,12 +1340,14 @@
       document.body.removeChild(link);
     };
 
+    // 4. Reset Riwayat
     window.hapusRiwayat = function() {
       if (confirm("Apakah Anda yakin ingin menghapus seluruh riwayat laporan di database?")) {
         remove(ref(db, 'riwayat_lembap'));
       }
     };
 
+    // 5. Simulator Pengiriman Data
     window.simulasiKirimData = function(suhu, kelembapan, kode) {
       const info = daftarKondisi[kode];
       const acMode = (kode === 1) ? "AC Mode Normal" : "AC Mode Dry (Aktif Otomatis)";
