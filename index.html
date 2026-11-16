@@ -5,32 +5,459 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Monitoring SBS - Sistem Minimum</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Link CSS hasil ekspor Figma untuk 4 waktu -->
+  <link href="./tampilan-awal-malam-6s.css" rel="stylesheet" />
+  <link href="./app-1e.css" rel="stylesheet" />
+  <link href="./app-pm.css" rel="stylesheet" />
+  <link href="./app-wp.css" rel="stylesheet" />
+
   <style>
-    body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#eef3f2;color:#12302f}
-    .card{background:#fff;padding:1.25rem;border-radius:.75rem;border:1px solid #d5e2df}
-    .nav-btn{display:flex;align-items:center;gap:.65rem;padding:.7rem .9rem;border-radius:.5rem;color:#a9cbc6;font-size:.875rem;font-weight:600;border-left:3px solid transparent;transition:background .15s}
-    .nav-btn:hover{background:#17504e;color:#fff}
-    .nav-btn.aktif{background:#17504e;color:#fff;border-left-color:#7fd1b9}
-    .nav-btn:focus-visible,#btn-masuk:focus-visible{outline:2px solid #7fd1b9;outline-offset:2px}
-    #splash{background:radial-gradient(circle at 25% 15%,#1c5d5a,#0f3d3e 65%);transition:opacity .6s,visibility .6s}
-    #splash.keluar{opacity:0;visibility:hidden;pointer-events:none}
-    @keyframes denyut{50%{opacity:.35}}
-    .denyut{animation:denyut 2s ease-in-out infinite}
-    @media (prefers-reduced-motion:reduce){.denyut{animation:none}#splash{transition:none}}
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: #eef3f2; color: #12302f; margin: 0; }
+    .card { background: #fff; padding: 1.25rem; border-radius: .75rem; border: 1px solid #d5e2df; }
+    .nav-btn { display: flex; align-items: center; gap: .65rem; padding: .7rem .9rem; border-radius: .5rem; color: #a9cbc6; font-size: .875rem; font-weight: 600; border-left: 3px solid transparent; transition: background .15s; }
+    .nav-btn:hover { background: #17504e; color: #fff; }
+    .nav-btn.aktif { background: #17504e; color: #fff; border-left-color: #7fd1b9; }
+
+    /* Kontainer Utama Splash Screen */
+    #splash { position: fixed; inset: 0; z-index: 50; transition: opacity .6s ease, visibility .6s ease; }
+    #splash.keluar { opacity: 0; visibility: hidden; pointer-events: none; }
+    .layar-waktu.hidden { display: none !important; }
+
+    /* =========================================================
+       STYLING CADANGAN UNTUK 4 KODE EKSPOR FIGMA (PAGI, SIANG, SORE, MALAM)
+       ========================================================= */
+    .app-wp-frame-app-wp,
+    .app-1e-frame-app1e,
+    .app-pm-frame-app-pm,
+    .tampilan-awal-malam-6s-frame-tampilan-awal6s {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 1.5rem;
+      user-select: none;
+    }
+
+    /* 1. TEMA PAGI (app-wp) */
+    .app-wp-frame-app-wp {
+      background: linear-gradient(180deg, #fdf6e2 0%, #d4ebfc 48%, #6bb5f9 100%);
+      color: #0d2a4a;
+    }
+
+    /* 2. TEMA SIANG (app-1e) */
+    .app-1e-frame-app1e {
+      background: linear-gradient(180deg, #dff1ff 0%, #99d1ff 50%, #3f93e8 100%);
+      color: #0d2b4d;
+    }
+
+    /* 3. TEMA SORE (app-pm) */
+    .app-pm-frame-app-pm {
+      background: linear-gradient(180deg, #fce3c6 0%, #d2c1e3 50%, #6d83c7 100%);
+      color: #1e2246;
+    }
+
+    /* 4. TEMA MALAM (tampilan-awal-malam-6s) */
+    .tampilan-awal-malam-6s-frame-tampilan-awal6s {
+      background: linear-gradient(180deg, #0b1f40 0%, #153564 55%, #204982 100%);
+      color: #ffffff;
+    }
+    .tampilan-awal-malam-6s-frame-app-eh {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Sembunyikan elemen dekoratif kosong dari ekspor Figma */
+    .app-wp-frame-text-lo, .app-wp-frame-container-an, .app-wp-frame-container-zm,
+    .app-1e-frame-text4b, .app-1e-frame-container-fc, .app-1e-frame-container-be,
+    .app-pm-frame-text-el, .app-pm-frame-container-js, .app-pm-frame-container8r,
+    .tampilan-awal-malam-6s-frame-text-n8, .tampilan-awal-malam-6s-frame-container-c7, .tampilan-awal-malam-6s-frame-container-aa {
+      display: none;
+    }
+
+    /* Kotak Ikon Atas (Siang & Sore) */
+    .app-1e-frame-container0d,
+    .app-pm-frame-container-xq {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      order: 1;
+    }
+    .app-1e-frame-container0d { background: rgba(255, 255, 255, 0.85); color: #163d6b; }
+    .app-pm-frame-container-xq { background: rgba(252, 240, 225, 0.9); color: #273866; }
+
+    /* Subjudul Kecil di Atas Sapaan */
+    .app-wp-text-si-segar-ol1,
+    .app-1e-text-sbs-environmen8h1,
+    .app-pm-text-sbs-environmen-xb1,
+    .tampilan-awal-malam-6s-text-si-segar7d1 {
+      margin-bottom: 0.75rem;
+      order: 2;
+    }
+    .app-wp-text-si-segar-ol2,
+    .app-1e-text-sbs-environmen8h2,
+    .app-pm-text-sbs-environmen-xb2,
+    .tampilan-awal-malam-6s-text-si-segar7d2 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin: 0;
+    }
+
+    /* Judul Sapaan Utama (Selamat pagi/siang/sore/malam) */
+    .app-wp-text-selamat-pagi-dk1,
+    .app-1e-text-selamat-siang-ts1,
+    .app-pm-text-selamat-sore-ma1,
+    .tampilan-awal-malam-6s-text-selamat-malam-u21 {
+      margin-bottom: 1.25rem;
+      order: 3;
+    }
+    .app-wp-text-selamat-pagi-dk2,
+    .app-1e-text-selamat-siang-ts2,
+    .app-pm-text-selamat-sore-ma2,
+    .tampilan-awal-malam-6s-text-selamat-malam-u22 {
+      font-size: clamp(2.75rem, 6vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    /* Teks Deskripsi */
+    .app-wp-text-pantau-kualitas2j1,
+    .app-1e-text-pantau-kualitas-sl1,
+    .app-pm-text-pantau-kualitas-jd1,
+    .tampilan-awal-malam-6s-text-pantau-kualitas1k1 {
+      max-width: 28rem;
+      margin-bottom: 2.5rem;
+      order: 4;
+    }
+    .app-wp-text-pantau-kualitas2j2,
+    .app-1e-text-pantau-kualitas-sl2,
+    .app-pm-text-pantau-kualitas-jd2,
+    .tampilan-awal-malam-6s-text-pantau-kualitas1k2 {
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      line-height: 1.6;
+      opacity: 0.85;
+      margin: 0;
+    }
+
+    /* Tombol "Buka dashboard" (Hanya tombol ini yang bisa diklik) */
+    .app-wp-frame-button-v3,
+    .app-1e-frame-button-en,
+    .app-pm-frame-button-h3,
+    .tampilan-awal-malam-6s-frame-button-fi {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.6rem 0.65rem 0.6rem 1.5rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease, filter 0.2s ease;
+      order: 5;
+    }
+    .app-wp-frame-button-v3:hover,
+    .app-1e-frame-button-en:hover,
+    .app-pm-frame-button-h3:hover,
+    .tampilan-awal-malam-6s-frame-button-fi:hover {
+      transform: scale(1.05);
+      filter: brightness(1.08);
+    }
+    .app-wp-frame-button-v3:active,
+    .app-1e-frame-button-en:active,
+    .app-pm-frame-button-h3:active,
+    .tampilan-awal-malam-6s-frame-button-fi:active {
+      transform: scale(0.96);
+    }
+
+    /* Warna Spesifik Tombol per Waktu */
+    .app-wp-frame-button-v3 { background-color: #1b4571; color: #ffffff; }
+    .app-1e-frame-button-en { background-color: #163d6b; color: #ffffff; }
+    .app-pm-frame-button-h3 { background-color: #273866; color: #ffffff; }
+    .tampilan-awal-malam-6s-frame-button-fi { background-color: #dbeafe; color: #0f294a; }
+
+    .app-wp-text-buka-dashboard642,
+    .app-1e-text-buka-dashboard-bq2,
+    .app-pm-text-buka-dashboard-s42,
+    .tampilan-awal-malam-6s-text-buka-dashboard-if2 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* Lingkaran Ikon Panah di Dalam Tombol */
+    .app-wp-frame-text91,
+    .app-1e-frame-text-xs,
+    .app-pm-frame-text-yh,
+    .tampilan-awal-malam-6s-frame-text-wd {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 9999px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .app-wp-frame-text91 { background-color: #356699; }
+    .app-1e-frame-text-xs { background-color: #316299; }
+    .app-pm-frame-text-yh { background-color: #45588c; }
+    .tampilan-awal-malam-6s-frame-text-wd { background-color: #255285; }
+
+    /* Teks Footer di Bagian Bawah */
+    .app-wp-text-e81,
+    .app-1e-text-sistem-minimum-kr1,
+    .app-pm-text-sistem-minimum-qd1,
+    .tampilan-awal-malam-6s-text-yo1 {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    .app-wp-text-e82,
+    .app-1e-text-sistem-minimum-kr2,
+    .app-pm-text-sistem-minimum-qd2,
+    .tampilan-awal-malam-6s-text-yo2 {
+      font-size: 0.75rem;
+      opacity: 0.65;
+      margin: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) { #splash { transition: none; } }
   </style>
 </head>
 <body>
 
-  <!-- Layar sapaan awal -->
-  <div id="splash" class="fixed inset-0 z-50 flex flex-col items-center justify-center text-center text-white p-6">
-    <h1 id="sapaan" class="text-5xl md:text-7xl font-extrabold tracking-tight">Selamat datang</h1>
-    <p class="mt-4 text-lg max-w-md text-teal-100/80">Pantau suhu dan kelembapan ruangan Anda secara langsung.</p>
-    <button type="button" id="btn-masuk" onclick="masuk()" class="denyut mt-14 text-sm font-semibold text-emerald-200 border border-emerald-200/40 hover:bg-emerald-200/15 hover:border-emerald-200 transition rounded-full px-5 py-2 cursor-pointer">
-      Klik untuk lanjut
-    </button>
+  <!-- =========================================================
+       SPLASH SCREEN (4 TAMPILAN FIGMA: PAGI, SIANG, SORE, MALAM)
+       ========================================================= -->
+  <div id="splash">
+
+    <!-- 1. TAMPILAN PAGI HARI -->
+    <div id="view-pagi" class="layar-waktu hidden">
+      <div id="n134233" class="app-wp-frame-app-wp">
+        <span id="n134234" class="app-wp-frame-text-lo"></span>
+        <div id="n134235" class="app-wp-frame-container-an"></div>
+        <div id="n134236" class="app-wp-frame-container-zm"></div>
+        <div id="n134237" class="app-wp-text-si-segar-ol1">
+          <p class="app-wp-text-si-segar-ol2">
+            SI-SEGAR WEATHER AND DENSITY MONITORING
+          </p>
+        </div>
+        <div id="n134238" class="app-wp-text-selamat-pagi-dk1">
+          <p class="app-wp-text-selamat-pagi-dk2">Selamat pagi</p>
+        </div>
+        <div id="n134239" class="app-wp-text-pantau-kualitas2j1">
+          <p class="app-wp-text-pantau-kualitas2j2">
+            Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara
+            langsung.
+          </p>
+        </div>
+        <a id="n134240" onclick="masuk()" role="button" tabindex="0" class="app-wp-frame-button-v3">
+          <div id="n134241" class="app-wp-text-buka-dashboard641">
+            <p class="app-wp-text-buka-dashboard642">Buka dashboard</p>
+          </div>
+          <span id="n134242" class="app-wp-frame-text91">
+            <img
+              src="assets/134243.svg"
+              alt="icon"
+              width="16"
+              height="16"
+              id="n134243"
+              class="app-wp-vector-icon-k2"
+              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'"
+            />
+          </span>
+        </a>
+        <div id="n134245" class="app-wp-text-e81">
+          <p class="app-wp-text-e82">
+            Kesehatan Badan dimulai dari lingkungan yang sehat.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. TAMPILAN SIANG HARI -->
+    <div id="view-siang" class="layar-waktu hidden">
+      <div id="n133387" class="app-1e-frame-app1e">
+        <span id="n133388" class="app-1e-frame-text4b"></span>
+        <div id="n133389" class="app-1e-frame-container-fc"></div>
+        <div id="n133390" class="app-1e-frame-container-be"></div>
+        <div id="n133391" class="app-1e-frame-container0d">
+          <img
+            src="assets/133392.svg"
+            alt="icon"
+            width="30"
+            height="30"
+            id="n133392"
+            class="app-1e-vector-icon-xg"
+            onerror="this.outerHTML='<svg width=\'26\' height=\'26\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M22 12h-4l-3 9L9 3l-3 9H2\'/></svg>'"
+          />
+        </div>
+        <div id="n133395" class="app-1e-text-sbs-environmen8h1">
+          <p class="app-1e-text-sbs-environmen8h2">SBS ENVIRONMENT MONITOR</p>
+        </div>
+        <div id="n133401" class="app-1e-text-pantau-kualitas-sl1">
+          <p class="app-1e-text-pantau-kualitas-sl2">
+            Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara
+            langsung.
+          </p>
+        </div>
+        <a id="n133403" onclick="masuk()" role="button" tabindex="0" class="app-1e-frame-button-en">
+          <div id="n133404" class="app-1e-text-buka-dashboard-bq1">
+            <p class="app-1e-text-buka-dashboard-bq2">Buka dashboard</p>
+          </div>
+          <span id="n133406" class="app-1e-frame-text-xs">
+            <img
+              src="assets/133407.svg"
+              alt="icon"
+              width="16"
+              height="16"
+              id="n133407"
+              class="app-1e-vector-icon-mr"
+              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'"
+            />
+          </span>
+        </a>
+        <div id="n133410" class="app-1e-text-sistem-minimum-kr1">
+          <p class="app-1e-text-sistem-minimum-kr2">
+            Sistem Minimum 1 &amp; 2 · Real-time monitoring
+          </p>
+        </div>
+        <div id="n134230" class="app-1e-text-selamat-siang-ts1">
+          <p class="app-1e-text-selamat-siang-ts2">Selamat siang</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. TAMPILAN SORE HARI -->
+    <div id="view-sore" class="layar-waktu hidden">
+      <div id="n133952" class="app-pm-frame-app-pm">
+        <span id="n133953" class="app-pm-frame-text-el"></span>
+        <div id="n133954" class="app-pm-frame-container-js"></div>
+        <div id="n133955" class="app-pm-frame-container8r"></div>
+        <div id="n133956" class="app-pm-frame-container-xq">
+          <img
+            src="assets/133957.svg"
+            alt="icon"
+            width="30"
+            height="30"
+            id="n133957"
+            class="app-pm-vector-icon-mp"
+            onerror="this.outerHTML='<svg width=\'26\' height=\'26\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M22 12h-4l-3 9L9 3l-3 9H2\'/></svg>'"
+          />
+        </div>
+        <div id="n133960" class="app-pm-text-sbs-environmen-xb1">
+          <p class="app-pm-text-sbs-environmen-xb2">SBS ENVIRONMENT MONITOR</p>
+        </div>
+        <div id="n133963" class="app-pm-text-selamat-sore-ma1">
+          <p class="app-pm-text-selamat-sore-ma2">Selamat sore</p>
+        </div>
+        <div id="n133966" class="app-pm-text-pantau-kualitas-jd1">
+          <p class="app-pm-text-pantau-kualitas-jd2">
+            Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara
+            langsung.
+          </p>
+        </div>
+        <a id="n133968" onclick="masuk()" role="button" tabindex="0" class="app-pm-frame-button-h3">
+          <div id="n133969" class="app-pm-text-buka-dashboard-s41">
+            <p class="app-pm-text-buka-dashboard-s42">Buka dashboard</p>
+          </div>
+          <span id="n133971" class="app-pm-frame-text-yh">
+            <img
+              src="assets/133972.svg"
+              alt="icon"
+              width="16"
+              height="16"
+              id="n133972"
+              class="app-pm-vector-icon-vk"
+              onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'"
+            />
+          </span>
+        </a>
+        <div id="n133975" class="app-pm-text-sistem-minimum-qd1">
+          <p class="app-pm-text-sistem-minimum-qd2">
+            Sistem Minimum 1 &amp; 2 · Real-time monitoring
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. TAMPILAN MALAM HARI -->
+    <div id="view-malam" class="layar-waktu hidden">
+      <div id="n139" class="tampilan-awal-malam-6s-frame-tampilan-awal6s">
+        <div id="n13297" class="tampilan-awal-malam-6s-frame-app-eh">
+          <span id="n13298" class="tampilan-awal-malam-6s-frame-text-n8"></span>
+          <div id="n13299" class="tampilan-awal-malam-6s-frame-container-c7"></div>
+          <div id="n13300" class="tampilan-awal-malam-6s-frame-container-aa"></div>
+          <div id="n13305" class="tampilan-awal-malam-6s-text-si-segar7d1">
+            <p class="tampilan-awal-malam-6s-text-si-segar7d2">
+              SI-SEGAR WEATHER AND DENSITY MONITORING
+            </p>
+          </div>
+          <div id="n13308" class="tampilan-awal-malam-6s-text-selamat-malam-u21">
+            <p class="tampilan-awal-malam-6s-text-selamat-malam-u22">
+              Selamat malam
+            </p>
+          </div>
+          <div id="n13311" class="tampilan-awal-malam-6s-text-pantau-kualitas1k1">
+            <p class="tampilan-awal-malam-6s-text-pantau-kualitas1k2">
+              Pantau kualitas udara, suhu, dan kelembapan ruangan Anda secara
+              langsung.
+            </p>
+          </div>
+          <a id="n13313" onclick="masuk()" role="button" tabindex="0" class="tampilan-awal-malam-6s-frame-button-fi">
+            <div id="n13314" class="tampilan-awal-malam-6s-text-buka-dashboard-if1">
+              <p class="tampilan-awal-malam-6s-text-buka-dashboard-if2">
+                Buka dashboard
+              </p>
+            </div>
+            <span id="n13316" class="tampilan-awal-malam-6s-frame-text-wd">
+              <img
+                src="assets/13317.svg"
+                alt="icon"
+                width="16"
+                height="16"
+                id="n13317"
+                class="tampilan-awal-malam-6s-vector-icon7e"
+                onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M9 18l6-6-6-6\'/></svg>'"
+              />
+            </span>
+          </a>
+          <div id="n13320" class="tampilan-awal-malam-6s-text-yo1">
+            <p class="tampilan-awal-malam-6s-text-yo2">
+              Kesehatan Badan dimulai dari lingkungan yang sehat.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
+  <!-- =========================================================
+       LAYOUT UTAMA DASHBOARD
+       ========================================================= -->
   <div class="flex flex-col md:flex-row min-h-screen">
 
     <!-- Sidebar kiri -->
@@ -157,13 +584,26 @@
     </main>
   </div>
 
-  <!-- Sapaan & navigasi tab (terpisah dari Firebase agar tetap jalan walau koneksi gagal) -->
+  <!-- Script Pengatur Tampilan Waktu Otomatis & Navigasi -->
   <script>
-    const jam = new Date().getHours();
-    const sapa = jam < 4 ? "Selamat malam" : jam < 11 ? "Selamat pagi" : jam < 15 ? "Selamat siang" : jam < 18 ? "Selamat sore" : "Selamat malam";
-    document.getElementById('sapaan').innerText = sapa;
+    function terapkanTemaWaktu() {
+      const jam = new Date().getHours();
+      const waktuAktif = jam < 4 ? "malam" : jam < 11 ? "pagi" : jam < 15 ? "siang" : jam < 18 ? "sore" : "malam";
 
-    function masuk() { document.getElementById('splash').classList.add('keluar'); }
+      ['pagi', 'siang', 'sore', 'malam'].forEach(w => {
+        const el = document.getElementById('view-' + w);
+        if (el) {
+          el.classList.toggle('hidden', w !== waktuAktif);
+        }
+      });
+    }
+
+    terapkanTemaWaktu();
+    setInterval(terapkanTemaWaktu, 60000);
+
+    function masuk() {
+      document.getElementById('splash').classList.add('keluar');
+    }
 
     function tampilTab(nama) {
       ['dashboard', 'statistik'].forEach(t => {
@@ -204,7 +644,6 @@
       6: { indikator: "Suhu dingin - ruangan sangat lembap", saran: saranDry, tema: "bg-rose-100 border-rose-400", bar: "bg-rose-500" }
     };
 
-    // Menghitung & menampilkan tab Statistik dari data riwayat
     function hitungStatistik() {
       const d = semuaDataRiwayat, n = d.length;
       const rata = k => n ? (d.reduce((a, x) => a + Number(x[k]), 0) / n).toFixed(1) : "--";
@@ -223,7 +662,6 @@
     }
     hitungStatistik();
 
-    // 1. Data real-time dari node 'sensor_terkini'
     onValue(ref(db, 'sensor_terkini'), (snapshot) => {
       document.getElementById('koneksi-badge').innerText = "Terhubung (Real-Time)";
       document.getElementById('koneksi-badge').className = "px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800";
@@ -243,7 +681,6 @@
       }
     });
 
-    // 2. Tabel laporan dari node 'riwayat_lembap'
     onValue(ref(db, 'riwayat_lembap'), (snapshot) => {
       const tbody = document.getElementById('tabel-riwayat');
       tbody.innerHTML = "";
@@ -272,7 +709,6 @@
       hitungStatistik();
     });
 
-    // 3. Download laporan ke CSV (titik koma agar rapi di Excel Indonesia)
     window.downloadCSV = function() {
       if (semuaDataRiwayat.length === 0) {
         alert("Belum ada data laporan untuk diunduh.");
@@ -293,14 +729,12 @@
       document.body.removeChild(link);
     };
 
-    // 4. Reset riwayat (membersihkan data simulasi)
     window.hapusRiwayat = function() {
       if (confirm("Apakah Anda yakin ingin menghapus seluruh riwayat laporan di database?")) {
         remove(ref(db, 'riwayat_lembap'));
       }
     };
 
-    // 5. Simulator untuk mengetes web tanpa hardware
     window.simulasiKirimData = function(suhu, kelembapan, kode) {
       const info = daftarKondisi[kode];
       const acMode = (kode === 1) ? "AC Mode Normal" : "AC Mode Dry (Aktif Otomatis)";
