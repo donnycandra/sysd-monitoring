@@ -518,6 +518,86 @@
     .tampilan-dashboard-pw-frame-text9q { background: #eab308; }
     .tampilan-dashboard-pw-frame-text-ba { background: #38bdf8; }
     .tampilan-dashboard-pw-frame-text-s5 { background: #f43f5e; }
+
+    /* =========================================================
+       3. TOMBOL BUKA/TUTUP SIDEBAR (gaya Google Gemini)
+          Desktop : sidebar mengecil menjadi deretan ikon.
+          <= 900px: sidebar menjadi laci yang bergeser dari kiri.
+       ========================================================= */
+    :root { --sb-dur: .35s; --sb-ease: cubic-bezier(.4, 0, .2, 1); }
+
+    #n13248 {
+      overflow: hidden;
+      z-index: 40;
+      transition: width var(--sb-dur) var(--sb-ease), padding var(--sb-dur) var(--sb-ease);
+    }
+    .sb-toggle {
+      width: 2.5rem; height: 2.5rem; padding: 0; margin: 0 0 .9rem .4rem; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 0; border-radius: 9999px; background: transparent; color: #a9cbc6; cursor: pointer;
+      transition: background .15s ease, color .15s ease, margin-left var(--sb-dur) var(--sb-ease);
+    }
+    .sb-toggle:hover { background: rgba(255, 255, 255, .1); color: #fff; }
+    .sb-toggle:focus-visible { outline: 2px solid #6ee7b7; outline-offset: 2px; }
+
+    /* Bagian yang menyusut / memudar saat sidebar ditutup */
+    #n13249, #n13295, #n13291 {
+      max-height: 8rem; overflow: hidden;
+      transition: max-height var(--sb-dur) var(--sb-ease), padding var(--sb-dur) var(--sb-ease), opacity .25s ease;
+    }
+    #n13253 { min-width: 12.9rem; }
+    #n13271, #n13277, #n13283 { max-width: 100%; transition: max-width var(--sb-dur) var(--sb-ease), opacity .25s ease; }
+    #n13271, #n13277 { white-space: nowrap; }
+    #n13290 { transition: width var(--sb-dur) var(--sb-ease), opacity .25s ease; }
+    #n13279 { transition: gap var(--sb-dur) var(--sb-ease), padding var(--sb-dur) var(--sb-ease); }
+    #n13248 .tampilan-dashboard-pw-frame-button78,
+    #n13248 .tampilan-dashboard-pw-frame-button-om {
+      transition: background .15s ease, color .15s ease, padding var(--sb-dur) var(--sb-ease), gap var(--sb-dur) var(--sb-ease);
+    }
+
+    @media (min-width: 901px) {
+      .sb-collapsed #n13248 { width: 80px; padding-left: .8rem; padding-right: .8rem; }
+      .sb-collapsed .sb-toggle { margin-left: .45rem; }
+      .sb-collapsed #n13249, .sb-collapsed #n13295 { max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; }
+      .sb-collapsed #n13291 { max-height: 0; opacity: 0; padding-top: 0; }
+      .sb-collapsed #n13271, .sb-collapsed #n13277, .sb-collapsed #n13283 { max-width: 0; opacity: 0; }
+      .sb-collapsed #n13290 { width: 0; opacity: 0; box-shadow: none; }
+      .sb-collapsed #n13279 { gap: 0; padding: .55rem; justify-content: center; }
+      .sb-collapsed #n13248 .tampilan-dashboard-pw-frame-button78,
+      .sb-collapsed #n13248 .tampilan-dashboard-pw-frame-button-om { gap: 0; padding-left: 0; padding-right: 0; justify-content: center; }
+    }
+
+    /* Layar gelap + bar atas (hanya dipakai di HP/tablet) */
+    .sb-backdrop {
+      position: fixed; inset: 0; z-index: 35; background: rgba(6, 30, 28, .5);
+      opacity: 0; visibility: hidden;
+      transition: opacity var(--sb-dur) var(--sb-ease), visibility 0s linear var(--sb-dur);
+    }
+    .sb-topbar { display: none; }
+    .sb-topbar .sb-toggle { margin: 0; color: #0f2926; }
+    .sb-topbar .sb-toggle:hover { background: rgba(15, 41, 38, .08); }
+    .sb-topbar-title { font-weight: 800; letter-spacing: -.01em; }
+
+    @media (max-width: 900px) {
+      #n13248 {
+        position: fixed; top: 0; bottom: 0; left: 0; height: auto; width: min(18rem, 84vw);
+        overflow-x: hidden; overflow-y: auto; transform: translateX(-100%); visibility: hidden;
+        transition: transform var(--sb-dur) var(--sb-ease), visibility 0s linear var(--sb-dur);
+      }
+      .sb-open-mobile #n13248 {
+        transform: none; visibility: visible; box-shadow: 8px 0 32px rgba(0, 0, 0, .3);
+        transition: transform var(--sb-dur) var(--sb-ease), visibility 0s;
+      }
+      .sb-open-mobile .sb-backdrop { opacity: 1; visibility: visible; transition: opacity var(--sb-dur) var(--sb-ease), visibility 0s; }
+      .sb-topbar {
+        display: flex; align-items: center; gap: .5rem;
+        position: sticky; top: 0; z-index: 30;
+        margin-bottom: .75rem; padding: .25rem 0; background: #f4f7f6;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #n13248, #n13248 *, .sb-toggle, .sb-backdrop { transition-duration: .01ms !important; transition-delay: 0s !important; }
+    }
   </style>
 </head>
 <body>
@@ -666,6 +746,14 @@
 
     <!-- KONTEN UTAMA KANAN (#n1311) -->
     <div id="n1311" class="tampilan-dashboard-pw-frame-app-ev">
+
+      <!-- BAR ATAS (hanya tampil di HP): tombol buka sidebar -->
+      <div class="sb-topbar">
+        <button type="button" class="sb-toggle" onclick="bukaTutupSidebar()" title="Buka sidebar" aria-label="Buka sidebar" aria-expanded="false" aria-controls="n13248">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span class="sb-topbar-title">Monitor SBS</span>
+      </div>
 
       <!-- HEADER (#n1315) -->
       <header id="n1315" class="tampilan-dashboard-pw-frame-header-mz">
@@ -1027,8 +1115,14 @@
       </div>
     </div>
 
+    <!-- Layar gelap di belakang sidebar (HP) -->
+    <div id="sb-backdrop" class="sb-backdrop" onclick="bukaTutupSidebar()"></div>
+
     <!-- SIDEBAR KIRI (#n13248) -->
     <div id="n13248" class="tampilan-dashboard-pw-frame-app-k1">
+      <button type="button" class="sb-toggle" onclick="bukaTutupSidebar()" title="Tutup/buka sidebar" aria-label="Tutup sidebar" aria-expanded="true" aria-controls="n13248">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
       <div id="n13249" class="tampilan-dashboard-pw-frame-container-v2">
         <div id="n13253" class="tampilan-dashboard-pw-frame-container-fd">
           <div id="n13254" class="tampilan-dashboard-pw-frame-bold-text4c">
@@ -1137,7 +1231,42 @@
 
       document.getElementById('n13265').classList.toggle('nav-aktif', isDash);
       document.getElementById('n13274').classList.toggle('nav-aktif', !isDash);
+
+      // Di HP, tutup sidebar setelah memilih tab
+      document.body.classList.remove('sb-open-mobile');
+      perbaruiSidebar();
     }
+
+    /* ---------- Buka/tutup sidebar (gaya Gemini) ---------- */
+    const SB_KUNCI = 'sbs-sidebar-tertutup';
+    const layarHP = window.matchMedia('(max-width: 900px)');
+
+    function perbaruiSidebar() {
+      const kelas = document.body.classList;
+      const terbuka = layarHP.matches ? kelas.contains('sb-open-mobile') : !kelas.contains('sb-collapsed');
+      document.querySelectorAll('.sb-toggle').forEach(btn => {
+        btn.setAttribute('aria-expanded', String(terbuka));
+        btn.setAttribute('aria-label', terbuka ? 'Tutup sidebar' : 'Buka sidebar');
+      });
+    }
+
+    function bukaTutupSidebar() {
+      const kelas = document.body.classList;
+      if (layarHP.matches) {
+        kelas.toggle('sb-open-mobile');               // HP: laci geser
+      } else {
+        kelas.toggle('sb-collapsed');                 // Desktop: mengecil jadi ikon
+        try { localStorage.setItem(SB_KUNCI, kelas.contains('sb-collapsed') ? '1' : '0'); } catch (e) {}
+      }
+      perbaruiSidebar();
+    }
+
+    try { if (localStorage.getItem(SB_KUNCI) === '1') document.body.classList.add('sb-collapsed'); } catch (e) {}
+    layarHP.addEventListener('change', () => { document.body.classList.remove('sb-open-mobile'); perbaruiSidebar(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && document.body.classList.contains('sb-open-mobile')) bukaTutupSidebar();
+    });
+    perbaruiSidebar();
   </script>
 
   <!-- Script Firebase & Logika Aplikasi -->
