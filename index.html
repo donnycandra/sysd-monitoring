@@ -316,7 +316,7 @@
       font-size: 1.15rem; font-weight: 700; color: #64748b; margin: 0;
     }
 
-    /* Status Pengiriman di Kartu 3 (#n1386) */
+    /* Status AC di Kartu 3 (#n1386) */
     .tampilan-dashboard-pw-frame-container-j7 {
       display: inline-flex; align-items: center; gap: 0.5rem;
       margin: 0.65rem 0 0.85rem; padding: 0.5rem 0.85rem;
@@ -413,7 +413,7 @@
     .tampilan-dashboard-pw-frame-container-e3 { overflow-x: auto; }
     .tampilan-dashboard-pw-frame-table32 {
       display: grid;
-      grid-template-columns: 1.3fr 0.7fr 0.8fr 1.6fr 1.6fr;
+      grid-template-columns: 1.3fr 0.7fr 0.8fr 1.6fr 1fr;
       min-width: 680px;
       width: 100%;
       border-top: 1px solid #e2e8f0;
@@ -701,7 +701,7 @@
              ========================================= -->
         <div id="n1332" class="tampilan-dashboard-pw-frame-container9s">
 
-          <!-- 3 Kartu Sensor & Status Pengiriman (#n1333) -->
+          <!-- 3 Kartu Sensor & AC (#n1333) -->
           <section id="n1333" class="tampilan-dashboard-pw-frame-section-yr">
 
             <!-- Kartu 1: Suhu Ruangan -->
@@ -778,7 +778,7 @@
               </div>
             </article>
 
-            <!-- Kartu 3: Status Pengiriman Sistem · Sismin 2 (Modifikasi Plan B) -->
+            <!-- Kartu 3: Kontrol AC · Sismin 2 -->
             <article id="n1377" class="tampilan-dashboard-pw-frame-article4z">
               <div id="n1378" class="tampilan-dashboard-pw-frame-container5m">
                 <span id="n1379" class="tampilan-dashboard-pw-frame-text-ul">
@@ -787,13 +787,13 @@
                 </span>
                 <span id="n1382" class="tampilan-dashboard-pw-frame-text-b3">
                   <div id="n1383" class="tampilan-dashboard-pw-text-otomatis-m41">
-                    <p class="tampilan-dashboard-pw-text-otomatis-m42">Real-Time</p>
+                    <p class="tampilan-dashboard-pw-text-otomatis-m42">Otomatis</p>
                   </div>
                 </span>
               </div>
               <div id="n1384" class="tampilan-dashboard-pw-frame-paragraph-x5">
                 <div id="n1385" class="tampilan-dashboard-pw-text-kontrol-ac861">
-                  <p class="tampilan-dashboard-pw-text-kontrol-ac862">Status Pengiriman Sistem · Sismin 2</p>
+                  <p class="tampilan-dashboard-pw-text-kontrol-ac862">Kontrol AC · Sismin 2</p>
                 </div>
               </div>
               <div id="n1386" class="tampilan-dashboard-pw-frame-container-j7">
@@ -802,13 +802,13 @@
                     onerror="this.outerHTML='<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2.5\'><polyline points=\'20 6 9 17 4 12\'/></svg>'" />
                 </span>
                 <div id="n1391" class="tampilan-dashboard-pw-text-mode-normal-wv1">
-                  <p id="val-ac" class="tampilan-dashboard-pw-text-mode-normal-wv2">Data terkirim ke dashboard</p>
+                  <p id="val-ac" class="tampilan-dashboard-pw-text-mode-normal-wv2">Mode Normal</p>
                 </div>
               </div>
               <div id="n1396" class="tampilan-dashboard-pw-frame-container-margin-ty">
                 <div id="n1393" class="tampilan-dashboard-pw-frame-container-at">
                   <div id="n1394" class="tampilan-dashboard-pw-text-kontrol-adaptif-g01">
-                    <p id="waktu-transmisi" class="tampilan-dashboard-pw-text-kontrol-adaptif-g02">Transmisi laporan sistem aktif</p>
+                    <p class="tampilan-dashboard-pw-text-kontrol-adaptif-g02">Kontrol adaptif sedang aktif</p>
                   </div>
                 </div>
               </div>
@@ -908,9 +908,8 @@
                 <div id="n13152" class="tampilan-dashboard-pw-frame-header-cell-rf">
                   <div id="n13153" class="tampilan-dashboard-pw-text-indikator-kondisi2g1"><p class="tampilan-dashboard-pw-text-indikator-kondisi2g2">Indikator kondisi</p></div>
                 </div>
-                <!-- Kolom ke-5 diubah menjadi Saran Tindakan -->
                 <div id="n13154" class="tampilan-dashboard-pw-frame-header-cell-x9">
-                  <div id="n13155" class="tampilan-dashboard-pw-text-tindakan-ac8a1"><p class="tampilan-dashboard-pw-text-tindakan-ac8a2">Saran Tindakan</p></div>
+                  <div id="n13155" class="tampilan-dashboard-pw-text-tindakan-ac8a1"><p class="tampilan-dashboard-pw-text-tindakan-ac8a2">Tindakan AC</p></div>
                 </div>
 
                 <!-- Baris Data Dinamis dari Firebase dimasukkan ke sini -->
@@ -1227,14 +1226,6 @@
       return "#10b981";
     }
 
-    function cariSaranDariItem(item) {
-      if (item.saran) return item.saran;
-      const cocok = Object.values(daftarKondisi).find(
-        k => k.indikator === item.indikator || k.tampilan === item.indikator
-      );
-      return cocok ? cocok.saran : "-";
-    }
-
     function hitungStatistik() {
       const d = semuaDataRiwayat, n = d.length;
       const rata = k => n ? (d.reduce((a, x) => a + Number(x[k]), 0) / n).toFixed(1) : "--";
@@ -1268,10 +1259,9 @@
 
       document.getElementById('val-suhu').innerText = data.suhu;
       document.getElementById('val-lembap').innerText = data.kelembapan;
-      document.getElementById('val-ac').innerText = "Data terkirim ke dashboard";
-      if (data.waktu) {
-        document.getElementById('waktu-transmisi').innerText = "Update terakhir: " + data.waktu;
-      }
+
+      const labelAC = String(data.status_ac).includes("Dry") ? "Mode Dry" : "Mode Normal";
+      document.getElementById('val-ac').innerText = labelAC;
 
       const info = daftarKondisi[data.kode_kondisi];
       if (info) {
@@ -1309,7 +1299,9 @@
 
       semuaDataRiwayat.slice(0, 10).forEach(item => {
         const dotColor = warnaDotDariIndikator(item.indikator);
-        const teksSaran = cariSaranDariItem(item);
+        const isDry = String(item.status_ac).toLowerCase().includes("dry");
+        const teksAC = isDry ? "Mode Dry" : "Mode Normal";
+        const kelasBadgeAC = isDry ? "badge-ac-dry" : "badge-ac-normal";
 
         container.innerHTML += `
           <div class="sel-tabel-figma"><p>${item.waktu}</p></div>
@@ -1320,7 +1312,7 @@
             <p>${item.indikator}</p>
           </div>
           <div class="sel-tabel-figma">
-            <p>${teksSaran}</p>
+            <span class="${kelasBadgeAC}">${teksAC}</span>
           </div>
         `;
       });
@@ -1333,11 +1325,10 @@
         alert("Belum ada data laporan untuk diunduh.");
         return;
       }
-      let csvContent = "\uFEFFNo;Waktu;Suhu (C);Kelembapan (%);Indikator Kondisi;Saran Tindakan\n";
+      let csvContent = "\uFEFFNo;Waktu;Suhu (C);Kelembapan (%);Indikator Kondisi;Tindakan Sismin 2\n";
       semuaDataRiwayat.forEach((item, index) => {
         const waktuBersih = String(item.waktu).replace(/;/g, ",");
-        const saranBersih = String(cariSaranDariItem(item)).replace(/;/g, ",");
-        csvContent += `${index + 1};"${waktuBersih}";${item.suhu};${item.kelembapan};"${item.indikator}";"${saranBersih}"\n`;
+        csvContent += `${index + 1};"${waktuBersih}";${item.suhu};${item.kelembapan};"${item.indikator}";"${item.status_ac}"\n`;
       });
 
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -1359,10 +1350,11 @@
     // 5. Simulator Pengiriman Data
     window.simulasiKirimData = function(suhu, kelembapan, kode) {
       const info = daftarKondisi[kode];
+      const acMode = (kode === 1) ? "AC Mode Normal" : "AC Mode Dry (Aktif Otomatis)";
       const waktuSekarang = new Date().toLocaleString('id-ID');
 
-      set(ref(db, 'sensor_terkini'), { suhu, kelembapan, kode_kondisi: kode, waktu: waktuSekarang });
-      push(ref(db, 'riwayat_lembap'), { waktu: waktuSekarang, suhu, kelembapan, indikator: info.indikator, saran: info.saran });
+      set(ref(db, 'sensor_terkini'), { suhu, kelembapan, kode_kondisi: kode, status_ac: acMode, waktu: waktuSekarang });
+      push(ref(db, 'riwayat_lembap'), { waktu: waktuSekarang, suhu, kelembapan, indikator: info.indikator, status_ac: acMode });
     };
   </script>
 </body>
