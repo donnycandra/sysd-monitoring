@@ -598,6 +598,166 @@
     @media (prefers-reduced-motion: reduce) {
       #n13248, #n13248 *, .sb-toggle, .sb-backdrop { transition-duration: .01ms !important; transition-delay: 0s !important; }
     }
+
+    /* =========================================================
+       4. STYLING LAYAR LOGIN & MENU PROFIL USER
+       ========================================================= */
+    #layar-login {
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      overflow-y: auto;
+      background: linear-gradient(135deg, #0b2e2c 0%, #0d3836 45%, #134e4a 100%);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .45s ease, visibility .45s ease;
+    }
+    #layar-login.aktif {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .login-kartu {
+      width: 100%;
+      max-width: 430px;
+      background: #ffffff;
+      border: 1px solid #dce7e5;
+      border-radius: 1.25rem;
+      padding: 2rem;
+      box-shadow: 0 24px 60px rgba(6, 30, 28, 0.35);
+      color: #0f2926;
+      margin: auto;
+    }
+    .login-header { text-align: center; margin-bottom: 1.4rem; }
+    .login-ikon {
+      width: 3.25rem; height: 3.25rem; border-radius: 0.9rem;
+      background: #ecfdf5; color: #0f766e; border: 1px solid #a7f3d0;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 0.85rem;
+    }
+    .login-judul { font-size: 1.35rem; font-weight: 800; color: #0f2926; margin: 0; letter-spacing: -0.02em; }
+    .login-sub { font-size: 0.82rem; color: #5b7571; margin: 0.3rem 0 0; }
+    .login-switch {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem;
+      background: #f1f5f4; padding: 0.3rem; border-radius: 0.75rem; margin-bottom: 1.25rem;
+    }
+    .login-switch-btn {
+      border: 0; background: transparent; padding: 0.55rem 0.75rem; border-radius: 0.55rem;
+      font-size: 0.82rem; font-weight: 700; color: #5b7571; cursor: pointer; transition: all .15s ease;
+    }
+    .login-switch-btn.aktif {
+      background: #ffffff; color: #0d3836; box-shadow: 0 2px 6px rgba(15, 41, 38, 0.08);
+    }
+    .auth-grup { margin-bottom: 0.95rem; }
+    .auth-label {
+      display: block; font-size: 0.78rem; font-weight: 700; color: #334e4a; margin-bottom: 0.35rem;
+    }
+    .auth-input-wrap { position: relative; }
+    .auth-input {
+      width: 100%; padding: 0.68rem 0.85rem; border: 1px solid #cbd9d6; border-radius: 0.65rem;
+      font-size: 0.88rem; font-family: inherit; color: #0f2926; background: #fbfdfc;
+      outline: none; transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .auth-input:focus {
+      border-color: #0d9488; background: #ffffff; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.14);
+    }
+    .auth-input[readonly] { background: #f1f5f4; color: #5b7571; cursor: not-allowed; }
+    .auth-toggle-pw {
+      position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
+      border: 0; background: transparent; color: #64748b; cursor: pointer;
+      padding: 0.25rem; display: flex; align-items: center; justify-content: center;
+    }
+    .auth-toggle-pw:hover { color: #0f2926; }
+    .auth-btn-utama {
+      width: 100%; padding: 0.78rem 1rem; border: 0; border-radius: 0.7rem;
+      background: #0d3836; color: #ffffff; font-size: 0.9rem; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: background .15s ease, transform .15s ease;
+      margin-top: 0.35rem;
+    }
+    .auth-btn-utama:hover { background: #0f524e; transform: translateY(-1px); }
+    .auth-pesan {
+      font-size: 0.8rem; font-weight: 600; padding: 0.6rem 0.8rem; border-radius: 0.6rem;
+      margin-bottom: 0.9rem; display: none;
+    }
+    .auth-pesan.error { display: block; background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+    .auth-pesan.sukses { display: block; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .login-info-demo {
+      margin-top: 1rem; padding: 0.65rem 0.85rem; border-radius: 0.65rem;
+      background: #f4f7f6; border: 1px dashed #cbd9d6; font-size: 0.76rem; color: #476460; text-align: center;
+    }
+    .login-kembali {
+      display: block; width: 100%; margin-top: 0.85rem; border: 0; background: transparent;
+      color: #5b7571; font-size: 0.8rem; font-weight: 600; font-family: inherit; cursor: pointer; text-align: center;
+    }
+    .login-kembali:hover { color: #0d3836; text-decoration: underline; }
+
+    /* Sidebar item Profil saat collapse di desktop */
+    #nav-profil-teks {
+      max-width: 100%; white-space: nowrap; overflow: hidden;
+      transition: max-width var(--sb-dur) var(--sb-ease), opacity .25s ease;
+    }
+    @media (min-width: 901px) {
+      .sb-collapsed #nav-profil-teks { max-width: 0; opacity: 0; }
+    }
+
+    /* Styling Tab Profil User */
+    .profil-ringkasan {
+      background: #ffffff;
+      border: 1px solid #dce7e5;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      box-shadow: 0 2px 10px rgba(15, 41, 38, 0.03);
+    }
+    .profil-identitas { display: flex; align-items: center; gap: 1.1rem; min-width: 0; }
+    .profil-avatar {
+      width: 4rem; height: 4rem; border-radius: 9999px; flex-shrink: 0;
+      background: linear-gradient(135deg, #0d3836, #0d9488); color: #ffffff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem; font-weight: 800; letter-spacing: 0.02em;
+      box-shadow: 0 8px 18px rgba(13, 56, 54, 0.2);
+    }
+    .profil-nama-utama { font-size: 1.3rem; font-weight: 800; color: #0f2926; margin: 0; }
+    .profil-meta { font-size: 0.84rem; color: #5b7571; margin: 0.2rem 0 0.55rem; }
+    .profil-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .profil-pill {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.28rem 0.7rem; border-radius: 9999px; font-size: 0.74rem; font-weight: 700;
+      background: #f0fdfa; color: #0f766e; border: 1px solid #ccfbf1;
+    }
+    .profil-btn-keluar {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.6rem 1rem; border-radius: 0.65rem; border: 1px solid #fecdd3;
+      background: #fff1f2; color: #be123c; font-size: 0.82rem; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: all .15s ease;
+    }
+    .profil-btn-keluar:hover { background: #ffe4e6; border-color: #fda4af; }
+    .profil-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem;
+    }
+    @media (max-width: 768px) {
+      .profil-grid { grid-template-columns: 1fr; }
+    }
+    .profil-aksi {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0.75rem;
+      margin-top: 1.25rem; padding-top: 1.15rem; border-top: 1px solid #f1f5f9;
+    }
+    .profil-btn-simpan {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.68rem 1.35rem; border-radius: 0.65rem; border: 0;
+      background: #0d9488; color: #ffffff; font-size: 0.85rem; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: background .15s ease;
+    }
+    .profil-btn-simpan:hover { background: #0f766e; }
   </style>
 </head>
 <body>
@@ -737,6 +897,83 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- =========================================================
+       LAYAR LOGIN AKUN & PASSWORD (SETELAH TAMPILAN AWAL)
+       ========================================================= -->
+  <div id="layar-login" role="dialog" aria-modal="true" aria-labelledby="login-judul">
+    <div class="login-kartu">
+      <div class="login-header">
+        <div class="login-ikon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h2 id="login-judul" class="login-judul">Masuk ke Monitor SBS</h2>
+        <p class="login-sub">Masukkan akun dan password Anda untuk mengakses dashboard</p>
+      </div>
+
+      <div class="login-switch">
+        <button type="button" id="btn-mode-masuk" class="login-switch-btn aktif" onclick="gantiModeAuth('masuk')">Masuk</button>
+        <button type="button" id="btn-mode-daftar" class="login-switch-btn" onclick="gantiModeAuth('daftar')">Daftar Akun</button>
+      </div>
+
+      <!-- Form Masuk -->
+      <form id="form-masuk" onsubmit="prosesMasuk(event)">
+        <div id="login-pesan" class="auth-pesan"></div>
+        <div class="auth-grup">
+          <label for="login-akun" class="auth-label">Akun (Username atau Email)</label>
+          <input id="login-akun" type="text" class="auth-input" placeholder="Contoh: admin" autocomplete="username" required />
+        </div>
+        <div class="auth-grup">
+          <label for="login-password" class="auth-label">Password</label>
+          <div class="auth-input-wrap">
+            <input id="login-password" type="password" class="auth-input" style="padding-right: 2.5rem;" placeholder="Masukkan password" autocomplete="current-password" required />
+            <button type="button" class="auth-toggle-pw" onclick="toggleLihatPassword('login-password')" aria-label="Tampilkan password" title="Tampilkan/sembunyikan password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="auth-btn-utama">Masuk ke Dashboard</button>
+        <div class="login-info-demo">
+          Akun default: <strong>admin</strong> &nbsp;|&nbsp; Password: <strong>123456</strong>
+        </div>
+      </form>
+
+      <!-- Form Daftar Akun Baru -->
+      <form id="form-daftar" class="hidden" onsubmit="prosesDaftar(event)">
+        <div id="daftar-pesan" class="auth-pesan"></div>
+        <div class="auth-grup">
+          <label for="reg-nama" class="auth-label">Nama Lengkap</label>
+          <input id="reg-nama" type="text" class="auth-input" placeholder="Masukkan nama lengkap" required />
+        </div>
+        <div class="auth-grup">
+          <label for="reg-jk" class="auth-label">Jenis Kelamin</label>
+          <select id="reg-jk" class="auth-input" required>
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Perempuan">Perempuan</option>
+          </select>
+        </div>
+        <div class="auth-grup">
+          <label for="reg-akun" class="auth-label">Akun (Username)</label>
+          <input id="reg-akun" type="text" class="auth-input" placeholder="Buat username akun" autocomplete="username" required />
+        </div>
+        <div class="auth-grup">
+          <label for="reg-password" class="auth-label">Password</label>
+          <div class="auth-input-wrap">
+            <input id="reg-password" type="password" class="auth-input" style="padding-right: 2.5rem;" placeholder="Minimal 4 karakter" autocomplete="new-password" minlength="4" required />
+            <button type="button" class="auth-toggle-pw" onclick="toggleLihatPassword('reg-password')" aria-label="Tampilkan password" title="Tampilkan/sembunyikan password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="auth-btn-utama">Daftar &amp; Masuk Dashboard</button>
+      </form>
+
+      <button type="button" class="login-kembali" onclick="kembaliKeSplash()">&larr; Kembali ke tampilan awal</button>
+    </div>
   </div>
 
   <!-- =========================================================
@@ -1112,6 +1349,135 @@
 
         </div>
 
+        <!-- =========================================
+             TAB 3: PROFIL USER
+             ========================================= -->
+        <div id="tab-profil" class="tampilan-dashboard-pw-frame-container9s hidden">
+
+          <!-- Kartu Ringkasan Profil -->
+          <section class="profil-ringkasan">
+            <div class="profil-identitas">
+              <div id="profil-avatar" class="profil-avatar">AD</div>
+              <div>
+                <p class="tampilan-dashboard-pw-text-riwayat-sensor-oo2">PROFIL PENGGUNA</p>
+                <h2 id="profil-view-nama" class="profil-nama-utama">Administrator SBS</h2>
+                <p id="profil-view-meta" class="profil-meta">@admin · Operator Ruangan</p>
+                <div class="profil-pills">
+                  <span id="profil-view-jk" class="profil-pill">Laki-laki</span>
+                  <span id="profil-view-instansi" class="profil-pill">Telkom University Surabaya</span>
+                  <span id="profil-view-email" class="profil-pill">admin@sbs-monitor.id</span>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="profil-btn-keluar" onclick="keluarAkun()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              Keluar Akun
+            </button>
+          </section>
+
+          <!-- Form Informasi User -->
+          <section class="tampilan-dashboard-pw-frame-section-yl">
+            <div class="mb-5">
+              <p class="tampilan-dashboard-pw-text-riwayat-sensor-oo2">INFORMASI USER</p>
+              <p class="tampilan-dashboard-pw-text-laporan-kondisi-ui2">Data diri pengguna</p>
+              <p class="tampilan-dashboard-pw-text4-data5j2">Lengkapi atau perbarui informasi profil akun Anda</p>
+            </div>
+
+            <div id="profil-pesan" class="auth-pesan"></div>
+
+            <form id="form-profil" onsubmit="simpanProfil(event)">
+              <div class="profil-grid">
+                <div>
+                  <label for="profil-nama" class="auth-label">Nama Lengkap</label>
+                  <input id="profil-nama" type="text" class="auth-input" placeholder="Masukkan nama lengkap" required />
+                </div>
+                <div>
+                  <label for="profil-akun" class="auth-label">Akun / Username</label>
+                  <input id="profil-akun" type="text" class="auth-input" readonly />
+                </div>
+                <div>
+                  <label for="profil-jk" class="auth-label">Jenis Kelamin</label>
+                  <select id="profil-jk" class="auth-input" required>
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="profil-tgl-lahir" class="auth-label">Tanggal Lahir</label>
+                  <input id="profil-tgl-lahir" type="date" class="auth-input" />
+                </div>
+                <div>
+                  <label for="profil-email" class="auth-label">Email</label>
+                  <input id="profil-email" type="email" class="auth-input" placeholder="nama@email.com" />
+                </div>
+                <div>
+                  <label for="profil-telepon" class="auth-label">Nomor Telepon / HP</label>
+                  <input id="profil-telepon" type="tel" class="auth-input" placeholder="08xxxxxxxxxx" />
+                </div>
+                <div>
+                  <label for="profil-peran" class="auth-label">Jabatan / Peran</label>
+                  <input id="profil-peran" type="text" class="auth-input" placeholder="Contoh: Mahasiswa / Operator Ruangan" />
+                </div>
+                <div>
+                  <label for="profil-instansi" class="auth-label">Instansi / Lokasi Ruangan</label>
+                  <input id="profil-instansi" type="text" class="auth-input" placeholder="Contoh: Telkom University Surabaya" />
+                </div>
+                <div style="grid-column: 1 / -1;">
+                  <label for="profil-alamat" class="auth-label">Alamat</label>
+                  <textarea id="profil-alamat" rows="2" class="auth-input" placeholder="Masukkan alamat lengkap"></textarea>
+                </div>
+              </div>
+
+              <div class="profil-aksi">
+                <button type="submit" class="profil-btn-simpan">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                  </svg>
+                  Simpan Perubahan
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <!-- Form Keamanan Akun (Ubah Password) -->
+          <section class="tampilan-dashboard-pw-frame-section-yl">
+            <div class="mb-5">
+              <p class="tampilan-dashboard-pw-text-riwayat-sensor-oo2">KEAMANAN AKUN</p>
+              <p class="tampilan-dashboard-pw-text-laporan-kondisi-ui2">Ubah password</p>
+              <p class="tampilan-dashboard-pw-text4-data5j2">Perbarui kata sandi akun Anda secara berkala</p>
+            </div>
+
+            <div id="pw-pesan" class="auth-pesan"></div>
+
+            <form id="form-ubah-password" onsubmit="ubahPassword(event)">
+              <div class="profil-grid">
+                <div>
+                  <label for="pw-lama" class="auth-label">Password Saat Ini</label>
+                  <input id="pw-lama" type="password" class="auth-input" placeholder="Masukkan password lama" required />
+                </div>
+                <div>
+                  <label for="pw-baru" class="auth-label">Password Baru</label>
+                  <input id="pw-baru" type="password" class="auth-input" placeholder="Minimal 4 karakter" minlength="4" required />
+                </div>
+                <div style="grid-column: 1 / -1;">
+                  <label for="pw-konfirm" class="auth-label">Konfirmasi Password Baru</label>
+                  <input id="pw-konfirm" type="password" class="auth-input" placeholder="Ulangi password baru" minlength="4" required />
+                </div>
+              </div>
+              <div class="profil-aksi">
+                <button type="submit" class="profil-btn-simpan">Perbarui Password</button>
+              </div>
+            </form>
+          </section>
+
+        </div>
+
       </div>
     </div>
 
@@ -1162,6 +1528,17 @@
           <span id="n13277" class="tampilan-dashboard-pw-frame-text-zn">
             <div id="n13278" class="tampilan-dashboard-pw-text-statistik0a1">
               <p class="tampilan-dashboard-pw-text-statistik0a2">Statistik</p>
+            </div>
+          </span>
+        </a>
+        <a id="nav-profil" onclick="tampilTab('profil')" role="button" tabindex="0" class="tampilan-dashboard-pw-frame-button-om">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span id="nav-profil-teks" class="tampilan-dashboard-pw-frame-text-zn">
+            <div class="tampilan-dashboard-pw-text-statistik0a1">
+              <p class="tampilan-dashboard-pw-text-statistik0a2">Profil User</p>
             </div>
           </span>
         </a>
@@ -1221,21 +1598,264 @@
     setInterval(terapkanTemaWaktu, 60000);
 
     function masuk() {
+      document.getElementById('layar-login').classList.add('aktif');
       document.getElementById('splash').classList.add('keluar');
+      setTimeout(() => {
+        const inputAkun = document.getElementById('login-akun');
+        if (inputAkun) inputAkun.focus();
+      }, 350);
     }
 
     function tampilTab(nama) {
       const isDash = nama === 'dashboard';
+      const isStat = nama === 'statistik';
+      const isProf = nama === 'profil';
       document.getElementById('n1332').classList.toggle('hidden', !isDash);
-      document.getElementById('tab-statistik').classList.toggle('hidden', isDash);
+      document.getElementById('tab-statistik').classList.toggle('hidden', !isStat);
+      document.getElementById('tab-profil').classList.toggle('hidden', !isProf);
 
       document.getElementById('n13265').classList.toggle('nav-aktif', isDash);
-      document.getElementById('n13274').classList.toggle('nav-aktif', !isDash);
+      document.getElementById('n13274').classList.toggle('nav-aktif', isStat);
+      document.getElementById('nav-profil').classList.toggle('nav-aktif', isProf);
 
       // Di HP, tutup sidebar setelah memilih tab
       document.body.classList.remove('sb-open-mobile');
       perbaruiSidebar();
     }
+
+    /* ---------- Autentikasi Akun & Profil User ---------- */
+    const KUNCI_AKUN = 'sbs-daftar-akun';
+    const KUNCI_USER_AKTIF = 'sbs-user-aktif';
+
+    function muatDaftarAkun() {
+      const bawaan = [{
+        akun: 'admin',
+        password: '123456',
+        nama: 'Administrator SBS',
+        jenisKelamin: 'Laki-laki',
+        tanggalLahir: '',
+        email: 'admin@sbs-monitor.id',
+        telepon: '',
+        peran: 'Operator Ruangan',
+        instansi: 'Telkom University Surabaya',
+        alamat: ''
+      }];
+      try {
+        const mentah = localStorage.getItem(KUNCI_AKUN);
+        if (!mentah) {
+          localStorage.setItem(KUNCI_AKUN, JSON.stringify(bawaan));
+          return bawaan;
+        }
+        const parsed = JSON.parse(mentah);
+        return Array.isArray(parsed) && parsed.length ? parsed : bawaan;
+      } catch (e) {
+        return bawaan;
+      }
+    }
+
+    function simpanDaftarAkun(daftar) {
+      try { localStorage.setItem(KUNCI_AKUN, JSON.stringify(daftar)); } catch (e) {}
+    }
+
+    let userAktif = null;
+
+    function tampilkanPesan(id, teks, tipe) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.className = 'auth-pesan' + (tipe ? ' ' + tipe : '');
+      el.textContent = teks || '';
+    }
+
+    function toggleLihatPassword(inputId) {
+      const inp = document.getElementById(inputId);
+      if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
+    }
+
+    function gantiModeAuth(mode) {
+      const isMasuk = mode === 'masuk';
+      document.getElementById('form-masuk').classList.toggle('hidden', !isMasuk);
+      document.getElementById('form-daftar').classList.toggle('hidden', isMasuk);
+      document.getElementById('btn-mode-masuk').classList.toggle('aktif', isMasuk);
+      document.getElementById('btn-mode-daftar').classList.toggle('aktif', !isMasuk);
+      tampilkanPesan('login-pesan', '', '');
+      tampilkanPesan('daftar-pesan', '', '');
+    }
+
+    function kembaliKeSplash() {
+      document.getElementById('splash').classList.remove('keluar');
+      setTimeout(() => {
+        document.getElementById('layar-login').classList.remove('aktif');
+      }, 500);
+    }
+
+    function buatInisial(nama) {
+      const bagian = String(nama || 'US').trim().split(/\s+/).filter(Boolean);
+      if (bagian.length >= 2) return (bagian[0][0] + bagian[1][0]).toUpperCase();
+      return (bagian[0] || 'US').slice(0, 2).toUpperCase();
+    }
+
+    function muatProfilKeUI(user) {
+      if (!user) return;
+      document.getElementById('profil-avatar').textContent = buatInisial(user.nama);
+      document.getElementById('profil-view-nama').textContent = user.nama || 'Pengguna';
+      document.getElementById('profil-view-meta').textContent =
+        '@' + user.akun + (user.peran ? ' · ' + user.peran : '');
+      document.getElementById('profil-view-jk').textContent = user.jenisKelamin || '-';
+      document.getElementById('profil-view-instansi').textContent = user.instansi || 'Instansi belum diisi';
+      document.getElementById('profil-view-email').textContent = user.email || 'Email belum diisi';
+
+      document.getElementById('profil-nama').value = user.nama || '';
+      document.getElementById('profil-akun').value = user.akun || '';
+      document.getElementById('profil-jk').value = user.jenisKelamin || 'Laki-laki';
+      document.getElementById('profil-tgl-lahir').value = user.tanggalLahir || '';
+      document.getElementById('profil-email').value = user.email || '';
+      document.getElementById('profil-telepon').value = user.telepon || '';
+      document.getElementById('profil-peran').value = user.peran || '';
+      document.getElementById('profil-instansi').value = user.instansi || '';
+      document.getElementById('profil-alamat').value = user.alamat || '';
+    }
+
+    function prosesMasuk(event) {
+      event.preventDefault();
+      const akunInput = document.getElementById('login-akun').value.trim();
+      const pwInput = document.getElementById('login-password').value;
+      const daftar = muatDaftarAkun();
+
+      const cocok = daftar.find(u =>
+        (u.akun.toLowerCase() === akunInput.toLowerCase() ||
+        (u.email && u.email.toLowerCase() === akunInput.toLowerCase())) &&
+        u.password === pwInput
+      );
+
+      if (!cocok) {
+        tampilkanPesan('login-pesan', 'Akun atau password tidak sesuai. Silakan periksa kembali.', 'error');
+        return;
+      }
+
+      userAktif = cocok;
+      try { localStorage.setItem(KUNCI_USER_AKTIF, cocok.akun); } catch (e) {}
+      muatProfilKeUI(userAktif);
+      tampilkanPesan('login-pesan', '', '');
+      document.getElementById('login-password').value = '';
+      document.getElementById('layar-login').classList.remove('aktif');
+    }
+
+    function prosesDaftar(event) {
+      event.preventDefault();
+      const nama = document.getElementById('reg-nama').value.trim();
+      const jenisKelamin = document.getElementById('reg-jk').value;
+      const akun = document.getElementById('reg-akun').value.trim();
+      const password = document.getElementById('reg-password').value;
+
+      if (!nama || !akun || password.length < 4) {
+        tampilkanPesan('daftar-pesan', 'Mohon lengkapi semua kolom dengan benar.', 'error');
+        return;
+      }
+
+      const daftar = muatDaftarAkun();
+      if (daftar.some(u => u.akun.toLowerCase() === akun.toLowerCase())) {
+        tampilkanPesan('daftar-pesan', 'Username akun sudah digunakan. Pilih username lain.', 'error');
+        return;
+      }
+
+      const userBaru = {
+        akun,
+        password,
+        nama,
+        jenisKelamin,
+        tanggalLahir: '',
+        email: '',
+        telepon: '',
+        peran: 'Pengguna',
+        instansi: '',
+        alamat: ''
+      };
+      daftar.push(userBaru);
+      simpanDaftarAkun(daftar);
+
+      userAktif = userBaru;
+      try { localStorage.setItem(KUNCI_USER_AKTIF, userBaru.akun); } catch (e) {}
+      muatProfilKeUI(userAktif);
+      document.getElementById('form-daftar').reset();
+      tampilkanPesan('daftar-pesan', '', '');
+      document.getElementById('layar-login').classList.remove('aktif');
+    }
+
+    function simpanProfil(event) {
+      event.preventDefault();
+      if (!userAktif) return;
+
+      const daftar = muatDaftarAkun();
+      const idx = daftar.findIndex(u => u.akun === userAktif.akun);
+      if (idx === -1) return;
+
+      daftar[idx] = {
+        ...daftar[idx],
+        nama: document.getElementById('profil-nama').value.trim(),
+        jenisKelamin: document.getElementById('profil-jk').value,
+        tanggalLahir: document.getElementById('profil-tgl-lahir').value,
+        email: document.getElementById('profil-email').value.trim(),
+        telepon: document.getElementById('profil-telepon').value.trim(),
+        peran: document.getElementById('profil-peran').value.trim(),
+        instansi: document.getElementById('profil-instansi').value.trim(),
+        alamat: document.getElementById('profil-alamat').value.trim()
+      };
+
+      simpanDaftarAkun(daftar);
+      userAktif = daftar[idx];
+      muatProfilKeUI(userAktif);
+      tampilkanPesan('profil-pesan', 'Informasi profil berhasil disimpan.', 'sukses');
+      setTimeout(() => tampilkanPesan('profil-pesan', '', ''), 3500);
+    }
+
+    function ubahPassword(event) {
+      event.preventDefault();
+      if (!userAktif) return;
+
+      const pwLama = document.getElementById('pw-lama').value;
+      const pwBaru = document.getElementById('pw-baru').value;
+      const pwKonfirm = document.getElementById('pw-konfirm').value;
+
+      if (pwLama !== userAktif.password) {
+        tampilkanPesan('pw-pesan', 'Password saat ini tidak sesuai.', 'error');
+        return;
+      }
+      if (pwBaru !== pwKonfirm) {
+        tampilkanPesan('pw-pesan', 'Konfirmasi password baru tidak cocok.', 'error');
+        return;
+      }
+
+      const daftar = muatDaftarAkun();
+      const idx = daftar.findIndex(u => u.akun === userAktif.akun);
+      if (idx !== -1) {
+        daftar[idx].password = pwBaru;
+        simpanDaftarAkun(daftar);
+        userAktif = daftar[idx];
+      }
+
+      document.getElementById('form-ubah-password').reset();
+      tampilkanPesan('pw-pesan', 'Password berhasil diperbarui.', 'sukses');
+      setTimeout(() => tampilkanPesan('pw-pesan', '', ''), 3500);
+    }
+
+    function keluarAkun() {
+      userAktif = null;
+      try { localStorage.removeItem(KUNCI_USER_AKTIF); } catch (e) {}
+      tampilTab('dashboard');
+      gantiModeAuth('masuk');
+      tampilkanPesan('profil-pesan', '', '');
+      tampilkanPesan('pw-pesan', '', '');
+      document.getElementById('layar-login').classList.add('aktif');
+    }
+
+    // Inisialisasi data akun awal
+    (function initUser() {
+      const daftar = muatDaftarAkun();
+      let akunTersimpan = null;
+      try { akunTersimpan = localStorage.getItem(KUNCI_USER_AKTIF); } catch (e) {}
+      userAktif = daftar.find(u => u.akun === akunTersimpan) || daftar[0];
+      muatProfilKeUI(userAktif);
+    })();
 
     /* ---------- Buka/tutup sidebar (gaya Gemini) ---------- */
     const SB_KUNCI = 'sbs-sidebar-tertutup';
@@ -1298,7 +1918,7 @@
         saran: "Kondisi ruangan baik. Pertahankan sirkulasi udara dan kebersihan ruangan.",
         statusPill: "Kondisi baik",
         badgeSuhu: "Stabil",
-        badgeLembap: "Normal",
+        badgeLembap: "Normal-Normal",
         bgBanner: "#ecfdf5", borderBanner: "#6ee7b7", teksBanner: "#064e3b", dotWarna: "#10b981", bar: "bg-emerald-500"
       },
       2: {
@@ -1471,7 +2091,7 @@
 
     // 4. Reset Riwayat
     window.hapusRiwayat = function() {
-      if (confirm("Apakah Anda yakin ingin menghapus seluruh riwayat laporan di database?")) {
+      if (confirm("Yakin Nih mau Dihapus Laporan Di Database?")) {
         remove(ref(db, 'riwayat_lembap'));
       }
     };
