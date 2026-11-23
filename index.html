@@ -410,19 +410,44 @@
     .tampilan-dashboard-pw-text-reset9k2, .tampilan-dashboard-pw-text-unduh-csv-p42 { margin: 0; }
 
     /* Tabel Grid Figma (#n13141 & #n13142) */
-    .tampilan-dashboard-pw-frame-container-e3 { overflow-x: auto; }
+    .tampilan-dashboard-pw-frame-container-e3 {
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: 310px;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      scrollbar-width: thin;
+      scrollbar-color: #94a3b8 #f1f5f9;
+    }
+    .tampilan-dashboard-pw-frame-container-e3::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    .tampilan-dashboard-pw-frame-container-e3::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .tampilan-dashboard-pw-frame-container-e3::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .tampilan-dashboard-pw-frame-container-e3::-webkit-scrollbar-thumb:hover {
+      background: #0d9488;
+    }
     .tampilan-dashboard-pw-frame-table32 {
       display: grid;
       grid-template-columns: 1.3fr 0.7fr 0.8fr 1.6fr 1fr;
       min-width: 680px;
       width: 100%;
-      border-top: 1px solid #e2e8f0;
     }
     .tampilan-dashboard-pw-frame-header-cell5z,
     .tampilan-dashboard-pw-frame-header-cell5c,
     .tampilan-dashboard-pw-frame-header-cell5d,
     .tampilan-dashboard-pw-frame-header-cell-rf,
     .tampilan-dashboard-pw-frame-header-cell-x9 {
+      position: sticky;
+      top: 0;
+      z-index: 2;
       background: #f8fafc;
       padding: 0.75rem 0.9rem;
       font-size: 0.75rem;
@@ -2046,13 +2071,13 @@
       semuaDataRiwayat = Object.values(logs).reverse();
       document.getElementById('total-data').innerText = semuaDataRiwayat.length;
 
-      semuaDataRiwayat.slice(0, 10).forEach(item => {
+      container.innerHTML = semuaDataRiwayat.map(item => {
         const dotColor = warnaDotDariIndikator(item.indikator);
         const isDry = String(item.status_ac).toLowerCase().includes("dry");
         const teksAC = isDry ? "Mode Dry" : "Mode Normal";
         const kelasBadgeAC = isDry ? "badge-ac-dry" : "badge-ac-normal";
 
-        container.innerHTML += `
+        return `
           <div class="sel-tabel-figma"><p>${item.waktu}</p></div>
           <div class="sel-tabel-figma"><p class="font-bold">${item.suhu}°C</p></div>
           <div class="sel-tabel-figma"><p class="font-bold">${item.kelembapan}%</p></div>
@@ -2064,29 +2089,363 @@
             <span class="${kelasBadgeAC}">${teksAC}</span>
           </div>
         `;
-      });
+      }).join("");
       hitungStatistik();
     });
 
-    // 3. Unduh CSV
+    // 3. Unduh Laporan Tabel Rapi (.xlsx)
     window.downloadCSV = function() {
       if (semuaDataRiwayat.length === 0) {
         alert("Belum ada data laporan untuk diunduh.");
         return;
       }
-      let csvContent = "\uFEFFNo;Waktu;Suhu (C);Kelembapan (%);Indikator Kondisi;Tindakan Sismin 2\n";
-      semuaDataRiwayat.forEach((item, index) => {
-        const waktuBersih = String(item.waktu).replace(/;/g, ",");
-        csvContent += `${index + 1};"${waktuBersih}";${item.suhu};${item.kelembapan};"${item.indikator}";"${item.status_ac}"\n`;
+
+      const escXml = (v) => String(v ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+
+      const colHuruf = (c) => String.fromCharCode(65 + c);
+
+      // Statistik ringkas
+      const totalData = semuaDataRiwayat.length;
+      const daftarSuhu = semuaDataRiwayat.map(x => Number(x.suhu)).filter(v => !Number.isNaN(v));
+      const daftarLembap = semuaDataRiwayat.map(x => Number(x.kelembapan)).filter(v => !Number.isNaN(v));
+
+      const rataSuhu = daftarSuhu.length ? (daftarSuhu.reduce((a, b) => a + b, 0) / daftarSuhu.length).toFixed(1) : "-";
+      const minSuhu = daftarSuhu.length ? Math.min(...daftarSuhu).toFixed(1) : "-";
+      const maxSuhu = daftarSuhu.length ? Math.max(...daftarSuhu).toFixed(1) : "-";
+
+      const rataLembap = daftarLembap.length ? (daftarLembap.reduce((a, b) => a + b, 0) / daftarLembap.length).toFixed(1) : "-";
+      const minLembap = daftarLembap.length ? Math.min(...daftarLembap).toFixed(0) : "-";
+      const maxLembap = daftarLembap.length ? Math.max(...daftarLembap).toFixed(0) : "-";
+
+      const namaUser = document.getElementById('profil-view-nama')?.textContent?.trim() || "-";
+      const akunUser = document.getElementById('profil-akun')?.value?.trim() || "-";
+      const instansiUser = document.getElementById('profil-instansi')?.value?.trim() || "-";
+      const waktuEkspor = new Date().toLocaleString('id-ID');
+
+      // Lebar kolom dinamis (A..F) agar semua teks muat tanpa terpotong
+      const lebarKolom = [8, 26, 15, 18, 40, 34];
+      semuaDataRiwayat.forEach(item => {
+        lebarKolom[1] = Math.max(lebarKolom[1], String(item.waktu ?? "").length + 4);
+        lebarKolom[4] = Math.max(lebarKolom[4], String(item.indikator ?? "").length + 4);
+        lebarKolom[5] = Math.max(lebarKolom[5], String(item.status_ac ?? "").length + 4);
       });
 
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      // Helper penyusun baris & merge
+      // Style index (mengacu pada cellXfs di styles.xml):
+      // 0: default | 1: judul utama (hijau, Times New Roman bold hitam, tengah)
+      // 2: judul tabel/seksi (kuning, bold hitam, tengah) | 3: header kolom (mint, bold hitam, tengah)
+      // 4: label metadata (mint muda, bold hitam, kiri) | 5: nilai metadata (putih, kiri)
+      // 6: isi tabel tengah (putih) | 7: isi tabel tengah tebal (Kesimpulan/Saran)
+      // 8: isi kosong uraian (putih, kiri atas, wrap)
+      const barisXml = [];
+      const daftarMerge = [];
+      let noBaris = 1;
+
+      const selXml = (r, c, val, styleIdx, isNum = false) => {
+        const refSel = `${colHuruf(c)}${r}`;
+        if (isNum && val !== "" && val !== null && val !== undefined && !Number.isNaN(Number(val))) {
+          return `<c r="${refSel}" s="${styleIdx}"><v>${Number(val)}</v></c>`;
+        }
+        return `<c r="${refSel}" t="inlineStr" s="${styleIdx}"><is><t xml:space="preserve">${escXml(val)}</t></is></c>`;
+      };
+
+      const tambahBaris = (daftarSel, tinggi = 22) => {
+        const r = noBaris++;
+        const isi = daftarSel.map(s => selXml(r, s.c, s.v, s.s, s.num)).join("");
+        barisXml.push(`<row r="${r}" ht="${tinggi}" customHeight="1">${isi}</row>`);
+        return r;
+      };
+
+      const buatRentangMerge = (r, cAwal, cAkhir, val, styleIdx) => {
+        const sel = [];
+        for (let c = cAwal; c <= cAkhir; c++) {
+          sel.push({ c, v: c === cAwal ? val : "", s: styleIdx });
+        }
+        if (cAkhir > cAwal) {
+          daftarMerge.push(`${colHuruf(cAwal)}${r}:${colHuruf(cAkhir)}${r}`);
+        }
+        return sel;
+      };
+
+      // Judul Utama
+      let r = noBaris;
+      tambahBaris(buatRentangMerge(r, 0, 5, "LAPORAN ANALISIS MONITORING SICK BUILDING SYNDROME (SBS)", 1), 28);
+
+      // Identitas Laporan
+      [
+        ["Tanggal Download", waktuEkspor],
+        ["Pengguna", `${namaUser} (@${akunUser})`],
+        ["Instansi / Lokasi", instansiUser]
+      ].forEach(([label, nilai]) => {
+        r = noBaris;
+        tambahBaris([
+          ...buatRentangMerge(r, 0, 1, label, 4),
+          ...buatRentangMerge(r, 2, 5, nilai, 5)
+        ], 22);
+      });
+
+      // TABEL 1: KESIMPULAN DAN SARAN (diletakkan pertama, isi dikosongkan untuk diisi pengguna)
+      r = noBaris;
+      tambahBaris(buatRentangMerge(r, 0, 5, "TABEL 1. KESIMPULAN DAN SARAN", 2), 26);
+
+      r = noBaris;
+      tambahBaris([
+        { c: 0, v: "No", s: 3 },
+        { c: 1, v: "Bagian", s: 3 },
+        ...buatRentangMerge(r, 2, 5, "Uraian", 3)
+      ], 24);
+
+      [
+        [1, "Kesimpulan"],
+        [2, "Saran"]
+      ].forEach(([no, bagian]) => {
+        r = noBaris;
+        tambahBaris([
+          { c: 0, v: no, s: 6, num: true },
+          { c: 1, v: bagian, s: 7 },
+          ...buatRentangMerge(r, 2, 5, "", 8)
+        ], 36);
+      });
+
+      // TABEL 2: RINGKASAN STATISTIK SENSOR
+      r = noBaris;
+      tambahBaris(buatRentangMerge(r, 0, 5, "TABEL 2. RINGKASAN STATISTIK SENSOR", 2), 26);
+
+      r = noBaris;
+      tambahBaris([
+        ...buatRentangMerge(r, 0, 1, "Parameter", 3),
+        ...buatRentangMerge(r, 2, 3, "Nilai", 3),
+        ...buatRentangMerge(r, 4, 5, "Keterangan", 3)
+      ], 30);
+
+      [
+        ["Total Data Riwayat", `${totalData} data`, "Tersimpan di database"],
+        ["Rata-rata Suhu", `${rataSuhu} °C`, "Rentang nyaman 23–26 °C"],
+        ["Suhu Minimum / Maksimum", `${minSuhu} °C / ${maxSuhu} °C`, "Nilai ekstrem suhu"],
+        ["Rata-rata Kelembapan", `${rataLembap} %`, "Ideal kelembapan 40–60 %"],
+        ["Kelembapan Minimum / Maksimum", `${minLembap} % / ${maxLembap} %`, "Nilai ekstrem kelembapan"]
+      ].forEach(([param, nilai, ket]) => {
+        r = noBaris;
+        tambahBaris([
+          ...buatRentangMerge(r, 0, 1, param, 6),
+          ...buatRentangMerge(r, 2, 3, nilai, 6),
+          ...buatRentangMerge(r, 4, 5, ket, 6)
+        ], 22);
+      });
+
+      // TABEL 3: RIWAYAT DATA SENSOR
+      r = noBaris;
+      tambahBaris(buatRentangMerge(r, 0, 5, "TABEL 3. RIWAYAT DATA SENSOR", 2), 24);
+
+      tambahBaris([
+        { c: 0, v: "No", s: 3 },
+        { c: 1, v: "Waktu Pencatatan", s: 3 },
+        { c: 2, v: "Suhu (°C)", s: 3 },
+        { c: 3, v: "Kelembapan (%)", s: 3 },
+        { c: 4, v: "Indikator Kondisi", s: 3 },
+        { c: 5, v: "Tindakan AC (Sismin 2)", s: 3 }
+      ], 30);
+
+      semuaDataRiwayat.forEach((item, idx) => {
+        tambahBaris([
+          { c: 0, v: idx + 1, s: 6, num: true },
+          { c: 1, v: item.waktu ?? "-", s: 6 },
+          { c: 2, v: item.suhu ?? "-", s: 6, num: true },
+          { c: 3, v: item.kelembapan ?? "-", s: 6, num: true },
+          { c: 4, v: item.indikator ?? "-", s: 6 },
+          { c: 5, v: item.status_ac ?? "-", s: 6 }
+        ], 22);
+      });
+
+      const colsXml = lebarKolom.map((w, i) =>
+        `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`
+      ).join("");
+
+      const mergeXml = daftarMerge.length
+        ? `<mergeCells count="${daftarMerge.length}">${daftarMerge.map(m => `<mergeCell ref="${m}"/>`).join("")}</mergeCells>`
+        : "";
+
+      const sheet1Xml =
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+        `<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">` +
+          `<sheetViews><sheetView workbookViewId="0"/></sheetViews>` +
+          `<sheetFormatPr defaultRowHeight="20"/>` +
+          `<cols>${colsXml}</cols>` +
+          `<sheetData>${barisXml.join("")}</sheetData>` +
+          mergeXml +
+        `</worksheet>`;
+
+      const stylesXml =
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+        `<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">` +
+          `<fonts count="3">` +
+            `<font><sz val="11"/><color rgb="FF000000"/><name val="Calibri"/></font>` +
+            `<font><b/><sz val="13"/><color rgb="FF000000"/><name val="Times New Roman"/></font>` +
+            `<font><b/><sz val="11"/><color rgb="FF000000"/><name val="Calibri"/></font>` +
+          `</fonts>` +
+          `<fills count="6">` +
+            `<fill><patternFill patternType="none"/></fill>` +
+            `<fill><patternFill patternType="gray125"/></fill>` +
+            `<fill><patternFill patternType="solid"><fgColor rgb="FF00B050"/><bgColor indexed="64"/></patternFill></fill>` +
+            `<fill><patternFill patternType="solid"><fgColor rgb="FFFFFF00"/><bgColor indexed="64"/></patternFill></fill>` +
+            `<fill><patternFill patternType="solid"><fgColor rgb="FFCCFBF1"/><bgColor indexed="64"/></patternFill></fill>` +
+            `<fill><patternFill patternType="solid"><fgColor rgb="FFF0FDFA"/><bgColor indexed="64"/></patternFill></fill>` +
+          `</fills>` +
+          `<borders count="2">` +
+            `<border><left/><right/><top/><bottom/><diagonal/></border>` +
+            `<border>` +
+              `<left style="thin"><color rgb="FF000000"/></left>` +
+              `<right style="thin"><color rgb="FF000000"/></right>` +
+              `<top style="thin"><color rgb="FF000000"/></top>` +
+              `<bottom style="thin"><color rgb="FF000000"/></bottom>` +
+              `<diagonal/>` +
+            `</border>` +
+          `</borders>` +
+          `<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>` +
+          `<cellXfs count="9">` +
+            `<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>` +
+            `<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>` +
+            `<xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>` +
+            `<xf numFmtId="0" fontId="2" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>` +
+            `<xf numFmtId="0" fontId="2" fillId="5" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="center"/></xf>` +
+            `<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="center" wrapText="1"/></xf>` +
+            `<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>` +
+            `<xf numFmtId="0" fontId="2" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>` +
+            `<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="top" wrapText="1"/></xf>` +
+          `</cellXfs>` +
+        `</styleSheet>`;
+
+      const berkasZip = [
+        {
+          nama: "[Content_Types].xml",
+          isi: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+               `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
+                 `<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>` +
+                 `<Default Extension="xml" ContentType="application/xml"/>` +
+                 `<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>` +
+                 `<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>` +
+                 `<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>` +
+               `</Types>`
+        },
+        {
+          nama: "_rels/.rels",
+          isi: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+               `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
+                 `<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>` +
+               `</Relationships>`
+        },
+        {
+          nama: "xl/workbook.xml",
+          isi: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+               `<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">` +
+                 `<sheets><sheet name="Laporan SBS" sheetId="1" r:id="rId1"/></sheets>` +
+               `</workbook>`
+        },
+        {
+          nama: "xl/_rels/workbook.xml.rels",
+          isi: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+               `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
+                 `<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>` +
+                 `<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>` +
+               `</Relationships>`
+        },
+        { nama: "xl/styles.xml", isi: stylesXml },
+        { nama: "xl/worksheets/sheet1.xml", isi: sheet1Xml }
+      ];
+
+      // Penyusun arsip ZIP (metode STORE) untuk menghasilkan file .xlsx murni
+      const enc = new TextEncoder();
+      const crcTabel = new Uint32Array(256);
+      for (let i = 0; i < 256; i++) {
+        let c = i;
+        for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+        crcTabel[i] = c >>> 0;
+      }
+      const hitungCrc32 = (bytes) => {
+        let crc = 0xFFFFFFFF;
+        for (let i = 0; i < bytes.length; i++) crc = crcTabel[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+        return (crc ^ 0xFFFFFFFF) >>> 0;
+      };
+
+      const bagianLokal = [];
+      const bagianPusat = [];
+      let offset = 0;
+
+      berkasZip.forEach(file => {
+        const namaBytes = enc.encode(file.nama);
+        const dataBytes = enc.encode(file.isi);
+        const crc = hitungCrc32(dataBytes);
+
+        const lfh = new Uint8Array(30 + namaBytes.length);
+        const lv = new DataView(lfh.buffer);
+        lv.setUint32(0, 0x04034B50, true);
+        lv.setUint16(4, 20, true);
+        lv.setUint16(6, 0x0800, true);
+        lv.setUint16(8, 0, true);
+        lv.setUint16(10, 0, true);
+        lv.setUint16(12, 0, true);
+        lv.setUint32(14, crc, true);
+        lv.setUint32(18, dataBytes.length, true);
+        lv.setUint32(22, dataBytes.length, true);
+        lv.setUint16(26, namaBytes.length, true);
+        lv.setUint16(28, 0, true);
+        lfh.set(namaBytes, 30);
+
+        bagianLokal.push(lfh, dataBytes);
+
+        const cdh = new Uint8Array(46 + namaBytes.length);
+        const cv = new DataView(cdh.buffer);
+        cv.setUint32(0, 0x02014B50, true);
+        cv.setUint16(4, 20, true);
+        cv.setUint16(6, 20, true);
+        cv.setUint16(8, 0x0800, true);
+        cv.setUint16(10, 0, true);
+        cv.setUint16(12, 0, true);
+        cv.setUint16(14, 0, true);
+        cv.setUint32(16, crc, true);
+        cv.setUint32(20, dataBytes.length, true);
+        cv.setUint32(24, dataBytes.length, true);
+        cv.setUint16(28, namaBytes.length, true);
+        cv.setUint16(30, 0, true);
+        cv.setUint16(32, 0, true);
+        cv.setUint16(34, 0, true);
+        cv.setUint16(36, 0, true);
+        cv.setUint32(38, 0, true);
+        cv.setUint32(42, offset, true);
+        cdh.set(namaBytes, 46);
+
+        bagianPusat.push(cdh);
+        offset += lfh.length + dataBytes.length;
+      });
+
+      const ukuranPusat = bagianPusat.reduce((s, b) => s + b.length, 0);
+      const eocd = new Uint8Array(22);
+      const ev = new DataView(eocd.buffer);
+      ev.setUint32(0, 0x06054B50, true);
+      ev.setUint16(4, 0, true);
+      ev.setUint16(6, 0, true);
+      ev.setUint16(8, berkasZip.length, true);
+      ev.setUint16(10, berkasZip.length, true);
+      ev.setUint32(12, ukuranPusat, true);
+      ev.setUint32(16, offset, true);
+      ev.setUint16(20, 0, true);
+
+      const blob = new Blob([...bagianLokal, ...bagianPusat, eocd], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.setAttribute("href", URL.createObjectURL(blob));
-      link.setAttribute("download", `Laporan_Analisis_SBS_${new Date().toISOString().slice(0, 10)}.csv`);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Laporan_Analisis_SBS_${new Date().toISOString().slice(0, 10)}.xlsx`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     };
 
     // 4. Reset Riwayat
@@ -2107,4 +2466,4 @@
     };
   </script>
 </body>
-</html>
+</html> 
